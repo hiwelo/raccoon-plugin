@@ -1,0 +1,44 @@
+{
+    "name": "hiwelo/raccoon-plugin",
+    "description": "Raccoon is a WordPress environment used to easily create new projects with a json configuration file",
+    "type": "wordpress-plugin",
+    "keywords": [
+        "wordpress",
+        "starter",
+        "raccoon"
+    ],
+    "homepage": "https://github.com/hiwelo/raccoon-plugin",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Damien Senger",
+            "email": "hi@hiwelo.co",
+            "homepage": "https://hiwelo.co",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+      "issues": "https://github.com/hiwelo/raccoon-plugin/issues",
+      "source": "https://github.com/hiwelo/raccoon-plugin"
+    },
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=5.5",
+        "composer/installers": "~1.0.12"
+    },
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^2.5",
+        "symfony/debug": "^3.0",
+        "phpdocumentor/phpdocumentor": "^2.8"
+    },
+    "autoload": {
+      "psr-4": {
+        "Hiwelo\\Raccoon\\": "./lib/"
+      }
+    },
+    "scripts": {
+        "test": ["./vendor/squizlabs/php_codesniffer/scripts/phpcs --extensions=php --standard=ruleset.xml --ignore=vendor/,docs/,node_modules/ . || true"],
+        "phpcbf": ["./vendor/squizlabs/php_codesniffer/scripts/phpcbf --extensions=php --standard=ruleset.xml --ignore=vendor/,docs/,node_modules/ ."],
+        "documentation": ["./vendor/phpdocumentor/phpdocumentor/bin/phpdoc -d . -t ./docs/api/ --ignore=vendor/,docs/,node_modules/"]
+    }
+}
