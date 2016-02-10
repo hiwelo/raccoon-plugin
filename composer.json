@@ -17,7 +17,6 @@
       "issues": "https://github.com/hiwelo/raccoon-plugin/issues",
       "source": "https://github.com/hiwelo/raccoon-plugin"
     },
-    "minimum-stability": "stable",
     "require": {
         "php": ">=5.5",
         "composer/installers": "~1.0.12"
