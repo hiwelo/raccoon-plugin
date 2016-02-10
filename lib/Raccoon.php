@@ -63,29 +63,29 @@ class Raccoon
             return;
         }
 
-        // load environment status
-        $this->loadEnvironmentStatus();
-        // load namespace if a specific one is specified
-        $this->loadNamespace();
-        // load internationalization if exists
-        $this->i18nReady();
-        // declare all theme features
-        $this->loadThemeSupports();
-        // if asked, cleanup methods loading
-        $this->loadCleanUp();
-        // declare all navigations
-        $this->loadNavigations();
-        // declare all post status
-        $this->loadPostStatus();
-        // declare all custom post status
-        $this->loadCustomPostTypes();
-        $this->removePostTypes();
-        // declare all sidebars
-        $this->loadSidebars();
-        // declare all widgets
-        $this->loadWidgets();
-        // declare custom contact methods
-        $this->loadContactMethods();
+        // // load environment status
+        // $this->loadEnvironmentStatus();
+        // // load namespace if a specific one is specified
+        // $this->loadNamespace();
+        // // load internationalization if exists
+        // $this->i18nReady();
+        // // declare all theme features
+        // $this->loadThemeSupports();
+        // // if asked, cleanup methods loading
+        // $this->loadCleanUp();
+        // // declare all navigations
+        // $this->loadNavigations();
+        // // declare all post status
+        // $this->loadPostStatus();
+        // // declare all custom post status
+        // $this->loadCustomPostTypes();
+        // $this->removePostTypes();
+        // // declare all sidebars
+        // $this->loadSidebars();
+        // // declare all widgets
+        // $this->loadWidgets();
+        // // declare custom contact methods
+        // $this->loadContactMethods();
     }
 
     /**
@@ -116,7 +116,7 @@ class Raccoon
             $file = 'manifest.json';
         }
 
-        $file = locate_template($file);
+        $file = get_template_directory() . '/' . $file;
 
         // verify if file exists
         if (!file_exists($file)) {

@@ -27,7 +27,7 @@
         "phpdocumentor/phpdocumentor": "^2.8"
     },
     "autoload": {
-      "psr-4": { "Hiwelo\\Raccoon\\": "" },
+      "psr-4": { "Hiwelo\\Raccoon\\": "./lib/" },
       "exclude-from-classmap": ["./Tests/"]
     },
     "scripts": {
