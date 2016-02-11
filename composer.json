@@ -1,6 +1,6 @@
 {
     "name": "hiwelo/raccoon-plugin",
-    "description": "Raccoon methods used to easily manage WordPress projects with a json configuration file",
+    "description": "Raccoon WordPress plugin allows you to easily manage WordPress projects with a json configuration file",
     "type": "wordpress-muplugin",
     "keywords": ["wordpress", "library", "raccoon"],
     "homepage": "https://github.com/hiwelo/raccoon-plugin",
