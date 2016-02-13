@@ -88,6 +88,8 @@ class Raccoon
         $this->removeCommentsFeature();
         // remove widgets feature
         $this->removeWidgetsFeature();
+        // remove some admin features in prod
+        $this->removeAdminFeaturesProduction();
     }
 
     /**
@@ -198,11 +200,47 @@ class Raccoon
     }
 
     /**
+     * Load WordPress mess cleanup class if asked in the manifest
+     *
+     * @return void
+     *
+     * @uses Hiwelo\Raccoon\CleanUp
+     * @uses Raccoon::$manifest
+     */
+    private function loadCleanUp()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('cleanup', $this->manifest['theme-features'])
+        ) {
+            $clean = new CleanUp($this->manifest['theme-features']['cleanup']);
+        }
+    }
+
+    /**
+     * Load WordPress production features management class if asked in the manifest
+     *
+     * @return void
+     *
+     * @uses Hiwelo\Raccoon\ProductionFeatures
+     * @uses Raccoon::$environment
+     * @uses Raccoon::$manifest
+     */
+    private function productionFeatures()
+    {
+        $this->environment = 'production';
+        if ($this->environment === 'production'
+            && array_key_exists('production', $this->manifest)
+        ) {
+            $production = new ProductionFeatures($this->manifest['production']);
+        }
+    }
+
+    /**
      * Theme translation activation (with .po & .mo files)
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/load_theme_textdomain/
+     * @link https://developer.wordpress.org/reference/functions/load_theme_textdomain
      * @uses Raccoon::$manifest
      * @uses Raccoon::$namespace
      */
@@ -622,23 +660,6 @@ class Raccoon
                     return $contactMethods;
                 }
             );
-        }
-    }
-
-    /**
-     * Load WordPress mess cleanup class if asked in the manifest
-     *
-     * @return void
-     *
-     * @uses Hwlo\Raccoon\CleanUp
-     * @uses Raccoon::$manifest
-     */
-    private function loadCleanUp()
-    {
-        if (array_key_exists('theme-features', $this->manifest)
-            && array_key_exists('cleanup', $this->manifest['theme-features'])
-        ) {
-            $clean = new CleanUp($this->manifest['theme-features']['cleanup']);
         }
     }
 

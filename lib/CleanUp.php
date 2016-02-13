@@ -65,7 +65,7 @@ class CleanUp
       * @param array $configuration cleanUp configuration
       * @return void
       *
-      * @link https://codex.wordpress.org/Function_Reference/locate_template
+      * @link https://codex.wordpress.org/Function_Reference/get_template_directory
       * @uses CleanUp::adminCleanUp()
       */
     public function __construct($configuration = [])
