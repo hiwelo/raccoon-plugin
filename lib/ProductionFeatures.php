@@ -71,5 +71,32 @@ class ProductionFeatures
                 $this->features = $this->default;
             }
         }
+
+        // remove elements from admin menu
+        $this->removeFromAdminMenu();
+    }
+
+    private function removeFromAdminMenu()
+    {
+        if (array_key_exists('admin-menu', $this->features)
+            && array_key_exists('remove', $this->features['admin-menu'])
+        ) {
+            $items = $this->features['admin-menu']['remove'];
+
+            foreach ($items as $item) {
+                if (is_string($item)) {
+                    add_action('admin_menu', function () use ($item) {
+                        remove_menu_page($item);
+                    });
+                } elseif (is_array($item)) {
+                    $menu = array_keys()[0];
+                    foreach ($item as $submenu) {
+                        add_action('admin_menu', function () use ($menu, $submenu) {
+                            remove_submenu_page($menu, $submenu);
+                        });
+                    }
+                }
+            }
+        }
     }
 }

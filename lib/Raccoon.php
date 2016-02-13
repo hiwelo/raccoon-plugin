@@ -227,7 +227,6 @@ class Raccoon
      */
     private function productionFeatures()
     {
-        $this->environment = 'production';
         if ($this->environment === 'production'
             && array_key_exists('production', $this->manifest)
         ) {
