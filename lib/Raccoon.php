@@ -89,7 +89,7 @@ class Raccoon
         // remove widgets feature
         $this->removeWidgetsFeature();
         // remove some admin features in prod
-        $this->removeAdminFeaturesProduction();
+        $this->productionFeatures();
     }
 
     /**
