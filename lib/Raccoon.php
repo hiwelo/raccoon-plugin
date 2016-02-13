@@ -592,6 +592,16 @@ class Raccoon
                         </script>
                     ";
                 });
+                // remove elements from admin bar
+                add_action('admin_footer', function () use ($postType) {
+                    echo "
+                        <script>
+                            jQuery(document).ready(function () {
+                                jQuery('#wp-admin-bar-new-" . $postType . "').remove();
+                            });
+                        </script>
+                    ";
+                });
             }
         }
     }
@@ -764,6 +774,10 @@ class Raccoon
                         </script>
                     ";
                 });
+
+                add_action('admin_bar_menu', function ($wp_admin_bar) {
+                    $wp_admin_bar->remove_node('comments');
+                }, 999);
             }
         }
     }
