@@ -12,8 +12,6 @@
  */
 namespace Hiwelo\Raccoon;
 
-use Symfony\Component\Debug\Debug;
-
 /**
  * Raccoon plugin core methods
  *
@@ -71,8 +69,8 @@ class Raccoon
         $this->i18nReady();
         // declare all theme features
         $this->loadThemeSupports();
-        // if asked, cleanup methods loading
-        $this->loadCleanUp();
+        // // if asked, cleanup methods loading
+        // $this->loadCleanUp();
         // declare all navigations
         $this->loadNavigations();
         // declare all post status
@@ -86,6 +84,10 @@ class Raccoon
         $this->loadWidgets();
         // declare custom contact methods
         $this->loadContactMethods();
+        // remove comments feature
+        $this->removeCommentsFeature();
+        // remove widgets feature
+        $this->removeWidgetsFeature();
     }
 
     /**
@@ -116,7 +118,7 @@ class Raccoon
             $file = 'manifest.json';
         }
 
-        $file = locate_template($file);
+        $file = get_template_directory() . '/' . $file;
 
         // verify if file exists
         if (!file_exists($file)) {
@@ -139,7 +141,8 @@ class Raccoon
     /**
      * Load the namespace specific information from the manifest
      *
-     * @return boolean true if a namespace is specified, false otherwise
+     * @global string  $namespace namespace for this WordPress template
+     * @return boolean            true if a namespace is specified, false otherwise
      *
      * @uses Raccoon::$manifest
      * @uses Raccoon::$namespace
@@ -151,7 +154,13 @@ class Raccoon
                 return false;
             }
 
+            // set namespace into this object
             $this->namespace = $this->manifest['namespace'];
+
+            // set a global var for this namespace
+            global $namespace;
+            $namespace = $this->namespace;
+
             return true;
         }
     }
@@ -183,24 +192,8 @@ class Raccoon
 
         switch ($this->environment) {
             case "development":
-                $this->loadDebugMethod();
+                // add here some development features
                 break;
-        }
-    }
-
-    /**
-     * Run all development environment status specific methods
-     *
-     * @return void
-     *
-     * @uses Raccoon::$environment
-     * @uses \Symfony\Component\Debug\Debug::enable()
-     */
-    private function loadDebugMethod()
-    {
-        if ($this->environment === 'development') {
-            // Symfony OOP debug librairy
-            Debug::enable();
         }
     }
 
@@ -430,6 +423,7 @@ class Raccoon
      *
      * @link https://developer.wordpress.org/reference/functions/__/
      * @link https://developer.wordpress.org/reference/functions/_x/
+     * @link https://developer.wordpress.org/reference/functions/add_action/
      * @link https://developer.wordpress.org/reference/functions/register_post_type/
      * @uses Raccoon::$manifest
      * @uses Raccoon::$namespace
@@ -484,7 +478,9 @@ class Raccoon
                     }
                 }
                 // custom post type registration
-                register_post_type($postType, $args);
+                add_action('after_setup_theme', function () use ($postType, $args) {
+                    register_post_type($postType, $args);
+                });
             }
         }
     }
@@ -502,34 +498,37 @@ class Raccoon
      */
     private function removePostTypes()
     {
-        // get all register post types
-        global $wp_post_types;
+        // doing this action during theme init
+        add_action('after_setup_theme', function () {
+            // get all register post types
+            global $wp_post_types;
 
-        if (array_key_exists('post-types', $this->manifest)
-            && array_key_exists('remove', $this->manifest['post-types'])
-        ) {
-            $postTypes = $this->manifest['post-types']['remove'];
+            if (array_key_exists('post-types', $this->manifest)
+                && array_key_exists('remove', $this->manifest['post-types'])
+            ) {
+                $postTypes = $this->manifest['post-types']['remove'];
 
-            foreach ($postTypes as $postType) {
-                // get post type name to remove from admin menu bar
-                $itemName = $wp_post_types[$postType]->name;
-                // unregister asked post type
-                unset($wp_post_types[$postType]);
-                // remove asked post type from admin menu bar
-                if ($postType === 'post') {
-                    $itemURL = 'edit.php';
-                } else {
-                    $itemURL = 'edit.php?post_type=' . $itemName;
-                }
-                // register item menu to remove
-                add_action(
-                    'admin_menu',
-                    function () use ($itemURL) {
-                        remove_menu_page($itemURL);
+                foreach ($postTypes as $postType) {
+                    // get post type name to remove from admin menu bar
+                    $itemName = $wp_post_types[$postType]->name;
+                    // unregister asked post type
+                    unset($wp_post_types[$postType]);
+                    // remove asked post type from admin menu bar
+                    if ($postType === 'post') {
+                        $itemURL = 'edit.php';
+                    } else {
+                        $itemURL = 'edit.php?post_type=' . $itemName;
                     }
-                );
+                    // register item menu to remove
+                    add_action(
+                        'admin_menu',
+                        function () use ($itemURL) {
+                            remove_menu_page($itemURL);
+                        }
+                    );
+                }
             }
-        }
+        });
     }
 
     /**
@@ -575,7 +574,9 @@ class Raccoon
         if (array_key_exists('widgets', $this->manifest)) {
             $widgets = $this->manifest['widgets'];
             foreach ($widgets as $widget) {
-                register_widget($widget);
+                add_action('after_theme_setup', function () use ($widget) {
+                    register_widget($widget);
+                });
             }
         }
     }
@@ -635,6 +636,121 @@ class Raccoon
             && array_key_exists('cleanup', $this->manifest['theme-features'])
         ) {
             $clean = new CleanUp($this->manifest['theme-features']['cleanup']);
+        }
+    }
+
+    /**
+     * Remove globally comments & discussion feature
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action/
+     * @link https://developer.wordpress.org/reference/functions/get_post_types/
+     * @link https://developer.wordpress.org/reference/functions/remove_menu_page/
+     * @link https://developer.wordpress.org/reference/functions/remove_meta_box/
+     * @link https://developer.wordpress.org/reference/functions/remove_post_type_support/
+     * @link https://developer.wordpress.org/reference/functions/remove_submenu_page/
+     * @link https://developer.wordpress.org/reference/functions/update_option/
+     * @uses Raccoon::$manifest
+     * @uses Tools::parseBooleans()
+     */
+    private function removeCommentsFeature()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('comments', $this->manifest['theme-features'])
+        ) {
+            $commentsFeature = $this->manifest['theme-features']['comments'];
+            Tools::parseBooleans($commentsFeature);
+
+            if ($commentsFeature === false) {
+                // count options to reset at 0
+                $options = ['comments_notify', 'default_pingback_flag'];
+                foreach ($options as $option) {
+                    update_option($option, 0);
+                }
+
+                // remove post type comment support
+                $postTypes = get_post_types();
+                foreach ($postTypes as $postType) {
+                    add_action('admin_menu', function () use ($postType) {
+                        // remove comment status
+                        remove_meta_box('commentstatusdiv', $postType, 'normal');
+
+                        // remove trackbacks
+                        remove_meta_box('trackbacksdiv', $postType, 'normal');
+                    });
+
+                    // remove all comments/trackbacks from tables
+                    remove_post_type_support($postType, 'comments');
+                    remove_post_type_support($postType, 'trackbacks');
+                }
+
+                // remove dashboard meta box for recents comments
+                add_action('admin_menu', function () {
+                    remove_meta_box('dashboard_recent_comments', 'dashboard', 'normal');
+                });
+
+                add_action('admin_menu', function () {
+                    remove_menu_page('edit-comments.php');
+                    remove_submenu_page('options-general.php', 'options-discussion.php');
+                });
+            }
+        }
+    }
+
+    private function removeWidgetsFeature()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('widget', $this->manifest['theme-features'])
+        ) {
+            $widgetFeature = $this->manifest['theme-features']['widget'];
+            Tools::parseBooleans($widgetFeature);
+
+            if ($widgetFeature === false) {
+                add_action('after_theme_setup', function () {
+                    // remove defaults widget
+                    $defaultWidgets = [
+                        'WP_Widget_Pages',
+                        'WP_Widget_Archives',
+                        'WP_Widget_Meta',
+                        'WP_Widget_Text',
+                        'WP_Widget_Recent_Posts',
+                        'WP_Widget_Recent_Comments',
+                        'WP_Widget_Calendar',
+                        'WP_Widget_Links',
+                        'WP_Widget_Search',
+                        'WP_Widget_Categories',
+                        'WP_Widget_RSS',
+                        'WP_Widget_Tag_Cloud',
+                        'WP_Nav_Menu_Widget',
+                        'Twenty_Eleven_Ephemera_Widget',
+                    ];
+                    foreach ($defaultWidgets as $widget) {
+                        $widgetsToRemove = $widget;
+                    }
+
+                    // list all custom widgets for unregistration
+                    global $wp_widget_factory;
+                    var_dump($wp_widget_factory);
+                    $widgets = $wp_widget_factory->widgets;
+                    foreach ($widgets as $id => $widget) {
+                        self::$widgetsToRemove[] = $id;
+                    }
+
+                    // list all sidebars for unregistration
+                    global $wp_registered_sidebars;
+                    $sidebars = $wp_registered_sidebars;
+                    foreach ($sidebars as $id => $sidebar) {
+                        self::$sidebarsToRemove[] = $id;
+                    }
+
+                    // remove widget admin menu item
+                    self::$adminSubMenuItemsToRemove[] = [
+                        'themes.php',
+                        'widgets.php'
+                    ];
+                });
+            }
         }
     }
 }
