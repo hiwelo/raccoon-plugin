@@ -791,48 +791,53 @@ class Raccoon
             Tools::parseBooleans($widgetFeature);
 
             if ($widgetFeature === false) {
-                add_action('after_theme_setup', function () {
-                    // remove defaults widget
-                    $defaultWidgets = [
-                        'WP_Widget_Pages',
-                        'WP_Widget_Archives',
-                        'WP_Widget_Meta',
-                        'WP_Widget_Text',
-                        'WP_Widget_Recent_Posts',
-                        'WP_Widget_Recent_Comments',
-                        'WP_Widget_Calendar',
-                        'WP_Widget_Links',
-                        'WP_Widget_Search',
-                        'WP_Widget_Categories',
-                        'WP_Widget_RSS',
-                        'WP_Widget_Tag_Cloud',
-                        'WP_Nav_Menu_Widget',
-                        'Twenty_Eleven_Ephemera_Widget',
-                    ];
-                    foreach ($defaultWidgets as $widget) {
-                        $widgetsToRemove = $widget;
-                    }
+                // remove defaults widget
+                $defaultWidgets = [
+                    'WP_Widget_Pages',
+                    'WP_Widget_Archives',
+                    'WP_Widget_Meta',
+                    'WP_Widget_Text',
+                    'WP_Widget_Recent_Posts',
+                    'WP_Widget_Recent_Comments',
+                    'WP_Widget_Calendar',
+                    'WP_Widget_Links',
+                    'WP_Widget_Search',
+                    'WP_Widget_Categories',
+                    'WP_Widget_RSS',
+                    'WP_Widget_Tag_Cloud',
+                    'WP_Nav_Menu_Widget',
+                    'Twenty_Eleven_Ephemera_Widget',
+                ];
+                foreach ($defaultWidgets as $widget) {
+                    add_action('widgets_init', function () use ($widget) {
+                        unregister_widget($widget);
+                    });
+                }
 
-                    // list all custom widgets for unregistration
-                    global $wp_widget_factory;
-                    var_dump($wp_widget_factory);
-                    $widgets = $wp_widget_factory->widgets;
-                    foreach ($widgets as $id => $widget) {
-                        self::$widgetsToRemove[] = $id;
-                    }
+                // list all custom widgets for unregistration
+                global $wp_widget_factory;
+                $widgets = $wp_widget_factory->widgets;
 
-                    // list all sidebars for unregistration
-                    global $wp_registered_sidebars;
-                    $sidebars = $wp_registered_sidebars;
-                    foreach ($sidebars as $id => $sidebar) {
-                        self::$sidebarsToRemove[] = $id;
-                    }
+                foreach ($widgets as $id => $widget) {
+                    var_dump($id);
+                    add_action('widgets_init', function () use ($id) {
+                        var_dump($id);
+                        unregister_widget($id);
+                    });
+                }
 
-                    // remove widget admin menu item
-                    self::$adminSubMenuItemsToRemove[] = [
-                        'themes.php',
-                        'widgets.php'
-                    ];
+                // list all sidebars for unregistration
+                global $wp_registered_sidebars;
+                $sidebars = $wp_registered_sidebars;
+                foreach ($sidebars as $id => $sidebar) {
+                    add_action('widgets_init', function () use ($id) {
+                        unregister_sidebar($id);
+                    });
+                }
+
+                // remove widget admin menu item
+                add_action('admin_menu', function () {
+                    remove_submenu_page('themes.php', 'widgets.php');
                 });
             }
 
