@@ -222,7 +222,7 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support/
+     * @link https://developer.wordpress.org/reference/functions/add_theme_support
      * @uses Raccoon::$manifest
      */
     private function loadThemeSupports()
@@ -319,13 +319,15 @@ class Raccoon
                 // post status registration
                 register_post_status($postStatus, $args);
 
-                // if we're in an admin panel, we do some actions
+                // if we're in an admin panel, we do some actions after theme setup
                 if (is_admin()) {
                     // add label status to a post in the admin panel list if this
                     // status is in the custom status list
                     add_action(
                         'display_post_states',
-                        function ($statuses) use ($namespace, $postStatus, $args, $post) {
+                        function ($statuses) use ($namespace, $postStatus, $args) {
+                            global $post;
+
                             if (get_query_var('post_status' !== $postStatus)
                                 && $post->post_Status === $postStatus
                             ) {
@@ -341,7 +343,7 @@ class Raccoon
                             echo "
                                 <script>
                                     jQuery(document).ready(function () {
-                                        jQuery('select[name=\"_status\"]').append(<option value=\"" .
+                                        jQuery('select[name=\"_status\"]').append('<option value=\"" .
                                         $postStatus .
                                         "\">" .
                                         __($args['label'], $namespace) .
@@ -355,7 +357,12 @@ class Raccoon
                     // add custom post status to edit page select box
                     add_action(
                         'admin_footer-post.php',
-                        function () use ($namespace, $postStatus, $args, $post) {
+                        function () use ($namespace, $postStatus, $args) {
+                            global $post;
+
+                            $complete = '';
+                            $label = '';
+
                             if ($post->post_status === $postStatus) {
                                 $complete = ' selected="selected"';
                                 $label = '<span id="post-status-display"> ' .
@@ -366,17 +373,15 @@ class Raccoon
                             echo "
                                 <script>
                                     jQuery(document).ready(function () {
-                                        jQuery('select#post_status').append('
-                                            <option value\"" .
-                                            $status .
+                                        jQuery('select#post_status').append('<option value\"" .
+                                            $postStatus .
                                             "\" " .
                                             $complete .
                                             ">" .
                                             __($args['label'], $namespace) .
-                                            "</option>
-                                        ');
+                                            "</option>');
                                         jQuery('.misc-pub-section label').append('" . $label . "');
-                                    }):
+                                    });
                                 </script>
                             ";
                         }
@@ -385,8 +390,13 @@ class Raccoon
                     // add custom post status to new page select box
                     add_action(
                         'admin_footer-post-new.php',
-                        function () use ($namespace, $postStatus, $args, $post) {
-                            if ($post->post_status === $status) {
+                        function () use ($namespace, $postStatus, $args) {
+                            global $post;
+
+                            $complete = '';
+                            $label = '';
+
+                            if ($post->post_status === $postStatus) {
                                 $complete = ' selected="selected"';
                                 $label = '<span id="post-status-display"> ' .
                                          __($args['label'], $namespace) .
@@ -396,15 +406,13 @@ class Raccoon
                             echo "
                                 <script>
                                     jQuery(document).ready(function () {
-                                        jQuery('select#post_status').append('
-                                            <option value=\"" .
-                                            $status .
+                                        jQuery('select#post_status').append('<option value=\"" .
+                                            $postStatus .
                                             "\" " .
                                             $complete .
                                             ">" .
                                             __($args['label'], $namespace) .
-                                            "</option>
-                                        ');
+                                            "</option>');
                                         jQuery('.misc-pub-section label').append('" . $label . "');
                                     });
                                 </script>
@@ -478,9 +486,7 @@ class Raccoon
                     }
                 }
                 // custom post type registration
-                add_action('after_setup_theme', function () use ($postType, $args) {
-                    register_post_type($postType, $args);
-                });
+                register_post_type($postType, $args);
             }
         }
     }
@@ -498,37 +504,34 @@ class Raccoon
      */
     private function removePostTypes()
     {
-        // doing this action during theme init
-        add_action('after_setup_theme', function () {
-            // get all register post types
-            global $wp_post_types;
+        // get all register post types
+        global $wp_post_types;
 
-            if (array_key_exists('post-types', $this->manifest)
-                && array_key_exists('remove', $this->manifest['post-types'])
-            ) {
-                $postTypes = $this->manifest['post-types']['remove'];
+        if (array_key_exists('post-types', $this->manifest)
+            && array_key_exists('remove', $this->manifest['post-types'])
+        ) {
+            $postTypes = $this->manifest['post-types']['remove'];
 
-                foreach ($postTypes as $postType) {
-                    // get post type name to remove from admin menu bar
-                    $itemName = $wp_post_types[$postType]->name;
-                    // unregister asked post type
-                    unset($wp_post_types[$postType]);
-                    // remove asked post type from admin menu bar
-                    if ($postType === 'post') {
-                        $itemURL = 'edit.php';
-                    } else {
-                        $itemURL = 'edit.php?post_type=' . $itemName;
-                    }
-                    // register item menu to remove
-                    add_action(
-                        'admin_menu',
-                        function () use ($itemURL) {
-                            remove_menu_page($itemURL);
-                        }
-                    );
+            foreach ($postTypes as $postType) {
+                // get post type name to remove from admin menu bar
+                $itemName = $wp_post_types[$postType]->name;
+                // unregister asked post type
+                unset($wp_post_types[$postType]);
+                // remove asked post type from admin menu bar
+                if ($postType === 'post') {
+                    $itemURL = 'edit.php';
+                } else {
+                    $itemURL = 'edit.php?post_type=' . $itemName;
                 }
+                // register item menu to remove
+                add_action(
+                    'admin_menu',
+                    function () use ($itemURL) {
+                        remove_menu_page($itemURL);
+                    }
+                );
             }
-        });
+            }
     }
 
     /**

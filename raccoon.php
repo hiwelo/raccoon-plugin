@@ -41,4 +41,6 @@ function __autoload($className)
 }
 
 // we call our main plugin class
-$raccoon = new Raccoon();
+add_action('after_setup_theme', function () {
+    $raccoon = new Raccoon();
+});
