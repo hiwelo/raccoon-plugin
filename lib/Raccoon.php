@@ -782,6 +782,17 @@ class Raccoon
         }
     }
 
+    /**
+     * Remove widget feature from all admin panels
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action
+     * @link https://developer.wordpress.org/reference/functions/remove_submenu_page
+     * @link https://developer.wordpress.org/reference/functions/unregister_sidebar
+     * @link https://developer.wordpress.org/reference/functions/unregister_widget
+     * @uses Tools::parseBooleans()
+     */
     private function removeWidgetsFeature()
     {
         if (array_key_exists('theme-features', $this->manifest)
@@ -819,9 +830,7 @@ class Raccoon
                 $widgets = $wp_widget_factory->widgets;
 
                 foreach ($widgets as $id => $widget) {
-                    var_dump($id);
                     add_action('widgets_init', function () use ($id) {
-                        var_dump($id);
                         unregister_widget($id);
                     });
                 }

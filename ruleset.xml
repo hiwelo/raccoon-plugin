@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<ruleset name="Raccoon">
+  <description>Raccoon Coding Standards</description>
+
+  <!-- Use PSR-2 as a base -->
+  <rule ref="PSR2" />
+  <!-- there may not be any 'TODO' tor 'FIXME' comments -->
+  <rule ref="Generic.Commenting.Todo" />
+  <rule ref="Generic.Commenting.Fixme" />
+  <!-- there may be comments in your code -->
+  <rule ref="PEAR.Commenting.ClassComment" />
+  <rule ref="PEAR.Commenting.FileComment" />
+  <rule ref="PEAR.Commenting.FunctionComment" />
+  <rule ref="PEAR.Commenting.InlineComment" />
+</ruleset>
