@@ -72,7 +72,13 @@ class CleanUp
     {
         // load manifest with an empty configuration
         if (count($configuration) === 0) {
-            $file = locate_template($file);
+            $file = get_template_directory() . '/' . $file;
+
+            // verify if file exists
+            if (!file_exists($file)) {
+                return false;
+            }
+
             $file = file_get_contents($file);
             $manifest = json_decode($file, true);
 
@@ -94,6 +100,9 @@ class CleanUp
 
         // we call admin clean up parts, if asked in the manifest
         $this->adminCleanUp();
+
+        // we call security clean up parts, if asked in the manifest
+        $this->securityCleanUp();
 
         // we call default theme clean up parts, if asked in the manifest
         if (array_key_exists('themes', $this->cleanUp)) {
@@ -131,11 +140,10 @@ class CleanUp
             $metaboxes = $this->cleanUp['admin']['metaboxes'];
 
             foreach ($metaboxes as $metabox) {
-                Core::$metaBoxToRemove[] = [
-                    $metabox,
-                    'dashboard',
-                    'core'
-                ];
+                add_action('admin_menu', function () use ($metabox) {
+                    // remove comment status
+                    remove_meta_box($metabox, 'dashboard', 'core');
+                });
             }
         }
     }

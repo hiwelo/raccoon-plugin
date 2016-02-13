@@ -69,8 +69,8 @@ class Raccoon
         $this->i18nReady();
         // declare all theme features
         $this->loadThemeSupports();
-        // // if asked, cleanup methods loading
-        // $this->loadCleanUp();
+        // if asked, cleanup methods loading
+        $this->loadCleanUp();
         // declare all navigations
         $this->loadNavigations();
         // declare all post status
