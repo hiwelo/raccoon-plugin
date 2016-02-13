@@ -1,5 +1,5 @@
 # Raccoon WordPress starter
-README.md subject to update.
+**README.md is going to be updated.**
 
 **[Raccoon](https://github.com/hiwelo/raccoon/)** is a [_WordPress_](https://wordpress.org/) starter theme based on Composer & NPM & Babel (ES 2015 preset) & Gulp & Knacss.
 
@@ -359,4 +359,3 @@ If you don't use _[Bedrock](https://roots.io/bedrock/)_, you can manually set en
   "environment-status": "development"
 }
 ```
-
