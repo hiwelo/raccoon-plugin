@@ -216,5 +216,16 @@ class CleanUp
                 unset($themes[$slug]);
             }
         }
+
+        // remove element from the dashboard activity widget
+        add_action('admin_footer-index.php', function () {
+            echo "
+                <script>
+                    jQuery(document).ready(function () {
+                        jQuery('p.hide-if-no-customize').remove();
+                    });
+                </script>
+            ";
+        });
     }
 }

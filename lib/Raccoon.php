@@ -567,8 +567,33 @@ class Raccoon
                         remove_menu_page($itemURL);
                     }
                 );
+                // remote post type count from dashboard activity widget
+                add_action('admin_footer-index.php', function () use ($postType) {
+                    echo "
+                        <script>
+                            jQuery(document).ready(function () {
+                                jQuery('#dashboard_right_now ." . $postType . "-count').remove();
+                            });
+                        </script>
+                    ";
+                });
+                // remove elements in the welcome panel column
+                add_action('admin_footer-index.php', function () use ($postType) {
+                    if ($postType === 'post') {
+                        $class = '.welcome-write-blog';
+                    } elseif ($postType === 'page') {
+                        $class = '.welcome-add-page';
+                    }
+                    echo "
+                        <script>
+                            jQuery(document).ready(function () {
+                                jQuery('" . $class . "').parent().remove();
+                            });
+                        </script>
+                    ";
+                });
             }
-            }
+        }
     }
 
     /**
@@ -728,6 +753,17 @@ class Raccoon
                         </script>
                     ";
                 });
+
+                // remove comments in the welcome panel column
+                add_action('admin_footer-index.php', function () {
+                    echo "
+                        <script>
+                            jQuery(document).ready(function () {
+                                jQuery('.welcome-comments').parent().remove();
+                            });
+                        </script>
+                    ";
+                });
             }
         }
     }
@@ -785,6 +821,17 @@ class Raccoon
                     ];
                 });
             }
+
+            // remove widget feature in the welcome panel column
+            add_action('admin_footer-index.php', function () {
+                echo "
+                    <script>
+                        jQuery(document).ready(function () {
+                            jQuery('.welcome-widgets-menus').parent().remove();
+                        });
+                    </script>
+                ";
+            });
         }
     }
 }
