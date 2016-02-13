@@ -34,14 +34,14 @@ class CleanUp
     public $default = [
         "admin" => [
             "metaboxes" => [
-                "dashboard_right_now",
                 "dashboard_incoming_links",
                 "dashboard_quick_press",
                 "dashboard_plugins",
                 "dashboard_recent_drafts",
                 "dashboard_recent_comments",
                 "dashboard_primary",
-                "dashboard_secondary"
+                "dashboard_secondary",
+                "dashboard_activity",
             ],
         ],
         "security" => [

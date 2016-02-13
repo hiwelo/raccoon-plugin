@@ -717,6 +717,17 @@ class Raccoon
                     remove_menu_page('edit-comments.php');
                     remove_submenu_page('options-general.php', 'options-discussion.php');
                 });
+
+                // remove comments count in activity dashboard
+                add_action('admin_footer-index.php', function () {
+                    echo "
+                        <script>
+                            jQuery(document).ready(function () {
+                                jQuery('#dashboard_right_now .comment-count').remove();
+                            });
+                        </script>
+                    ";
+                });
             }
         }
     }

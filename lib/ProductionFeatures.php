@@ -72,10 +72,23 @@ class ProductionFeatures
             }
         }
 
+        // add elements into admin menu
+        $this->addIntoAdminMenu();
+
         // remove elements from admin menu
         $this->removeFromAdminMenu();
     }
 
+    /**
+     * Remove elements from admin menu bar
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action
+     * @link https://developer.wordpress.org/reference/functions/remove_menu_page
+     * @link https://developer.wordpress.org/reference/functions/remove_submenu_page
+     * @uses ProductionFeatures::$features
+     */
     private function removeFromAdminMenu()
     {
         if (array_key_exists('admin-menu', $this->features)
