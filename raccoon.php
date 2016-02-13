@@ -30,15 +30,8 @@ if (!defined('WPINC')) {
     die;
 }
 
-// autoload function
-function __autoload($className)
-{
-    $file = './lib/' . $className . '.php';
-
-    if (file_exists($file)) {
-        require_once $file;
-    }
-}
+// require class autoloading
+require_once 'autoload.php';
 
 // we call our main plugin class
 add_action('after_setup_theme', function () {
