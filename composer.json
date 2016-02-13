@@ -2,7 +2,7 @@
     "name": "hiwelo/raccoon-plugin",
     "description": "Raccoon WordPress plugin allows you to easily manage WordPress projects with a json configuration file",
     "type": "wordpress-muplugin",
-    "keywords": ["wordpress", "library", "raccoon"],
+    "keywords": ["wordpress", "plugin", "raccoon"],
     "homepage": "https://github.com/hiwelo/raccoon-plugin",
     "license": "GPL-3.0",
     "authors": [
