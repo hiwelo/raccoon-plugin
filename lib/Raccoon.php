@@ -92,6 +92,8 @@ class Raccoon
         $this->productionFeatures();
         // add a global settings page if asked
         $this->loadAllSettingsPage();
+        // add thumbnails in pages or posts lists
+        $this->addThumbnailInLists();
     }
 
     /**
@@ -893,6 +895,83 @@ class Raccoon
                         'options.php'
                     );
                 });
+            }
+        }
+    }
+
+    private function addThumbnailInLists()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('thumbnail-in-lists', $this->manifest['theme-features'])
+        ) {
+            $option = $this->manifest['theme-features']['thumbnail-in-lists'];
+            Tools::parseBooleans($option);
+
+            if ($option === true) {
+                add_filter('manage_posts_columns', [$this, 'addThumbColumn']);
+                add_filter('manage_pages_columns', [$this, 'addThumbColumn']);
+
+                add_action('manage_posts_custom_column', [$this, 'addThumbValue'], 10, 2);
+                add_action('manage_pages_custom_column', [$this, 'addThumbValue'], 10, 2);
+            }
+        }
+    }
+
+    /**
+     * Add a new column in an array for thumnails
+     *
+     * @param array $cols columns
+     * @return array
+     */
+    public function addThumbColumn($cols)
+    {
+        $cols['Thumbnail'] = __('Thumbnail');
+        return $cols;
+    }
+
+    /**
+     * Add a thumbnail into a list of posts or pages
+     *
+     * @param string  $column array column name
+     * @param integer $post   post id
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/get_children
+     * @link https://developer.wordpress.org/reference/functions/get_post_meta
+     * @link https://developer.wordpress.org/reference/functions/wp_get_attachment_image
+     */
+    public function addThumbValue($column, $post)
+    {
+        $width = (int) 35;
+        $height = (int) 35;
+
+        if ('thumbnail' === $column) {
+            $thumbnailID = get_post_meta($post, '_thumbnail_id', true);
+            $attachments = get_children([
+                'post_parent' => $post,
+                'post_type' =>
+                'attachment',
+                'post_mime_type' => 'image'
+            ]);
+            if ($thumbnailID) {
+                $thumbnail = wp_get_attachment_image(
+                    $thumbnailID,
+                    [$width, $height],
+                    true
+                );
+            } elseif ($attachments) {
+                foreach ($attachments as $attachmentID => $attachment) {
+                    $thumnail = wp_get_attachment_image(
+                        $attachmentID,
+                        [$width, $height],
+                        true
+                    );
+                }
+            }
+            if (isset($thumbnail) && $thumbnail) {
+                echo $thumbnail;
+            } else {
+                _e('None');
             }
         }
     }
