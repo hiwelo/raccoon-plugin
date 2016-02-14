@@ -90,6 +90,8 @@ class Raccoon
         $this->removeWidgetsFeature();
         // remove some admin features in prod
         $this->productionFeatures();
+        // add a global settings page if asked
+        $this->loadAllSettingsPage();
     }
 
     /**
@@ -860,6 +862,38 @@ class Raccoon
                     </script>
                 ";
             });
+        }
+    }
+
+    /**
+     * Add a custom menu link for all settings page
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action
+     * @link https://developer.wordpress.org/reference/functions/add_options_page
+     * @uses Raccoon::$environment
+     * @uses Raccoon::$manifest
+     * @uses Tools::parseBooleans()
+     */
+    private function loadAllSettingsPage()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('all-settings', $this->manifest['theme-features'])
+        ) {
+            $allSettings = $this->manifest['theme-features']['all-settings'];
+            Tools::parseBooleans($allSettings);
+
+            if ($allSettings === true && $this->environment === 'development') {
+                add_action('admin_menu', function () {
+                    add_options_page(
+                        __('All Settings'),
+                        __('All Settings'),
+                        'administrator',
+                        'options.php'
+                    );
+                });
+            }
         }
     }
 }
