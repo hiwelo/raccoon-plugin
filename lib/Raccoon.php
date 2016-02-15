@@ -52,8 +52,6 @@ class Raccoon
      * Setup this theme with all informations available in the manifest, a JSON
      * configuration file
      *
-     * @param string $file manifest filename
-     *
      * @return void
      *
      * @since 1.0.0
