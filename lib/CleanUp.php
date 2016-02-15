@@ -203,7 +203,10 @@ class CleanUp
             foreach ($this->cleanUp['security'] as $action) {
                 switch ($action) {
                     case 'no-ftp':
-                        define('FS_METHOD', 'direct');
+                        $contants = get_defined_constants();
+                        if (!array_key_exists('FS_METHOD', $contants)) {
+                            define('FS_METHOD', 'direct');
+                        }
                         break;
 
                     case 'login-error':
