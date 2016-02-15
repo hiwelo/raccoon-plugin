@@ -23,7 +23,6 @@
     },
     "require-dev": {
         "squizlabs/php_codesniffer": "^2.5",
-        "symfony/debug": "^3.0",
         "phpdocumentor/phpdocumentor": "^2.8"
     },
     "autoload": {
@@ -32,13 +31,16 @@
     },
     "scripts": {
         "test": [
-            "./vendor/squizlabs/php_codesniffer/scripts/phpcs --extensions=php --standard=ruleset.xml --ignore=vendor/,docs/,node_modules/ . || true"
+            "./vendor/bin/phpcs --extensions=php --standard=ruleset.xml --ignore=vendor/,docs/,node_modules/ . || true"
+        ],
+        "phpcs": [
+            "./vendor/bin/phpcs --extensions=php --standard=ruleset.xml --ignore=vendor/,docs/,node_modules/ ."
         ],
         "phpcbf": [
-            "./vendor/squizlabs/php_codesniffer/scripts/phpcbf --extensions=php --standard=ruleset.xml --ignore=vendor/,docs/,node_modules/ ."
+            "./vendor/bin/phpcbf --extensions=php --standard=ruleset.xml --ignore=vendor/,docs/,node_modules/ ."
         ],
         "documentation": [
-            "./vendor/phpdocumentor/phpdocumentor/bin/phpdoc -d . -t ./docs/api/ --ignore=vendor/,docs/,node_modules/"
+            "./vendor/bin/phpdoc -d . -t ./docs/api/ --ignore=vendor/,docs/,node_modules/"
         ]
     }
 }
