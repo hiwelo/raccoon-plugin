@@ -1,0 +1,13 @@
+sudo: false
+language:
+  - php
+
+cache:
+  directories:
+    - vendor
+
+install:
+  - composer install --no-scripts
+
+script:
+  - composer phpcs

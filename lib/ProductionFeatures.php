@@ -31,8 +31,6 @@ class ProductionFeatures
       * Features configuration from the manifest
       *
       * @var array
-      *
-      * @since 1.0.0
       */
     private $features = [];
 
@@ -40,8 +38,6 @@ class ProductionFeatures
      * Features default configuration
      *
      * @var array
-     *
-     * @since 1.0.0
      */
     public $default = [
         "admin-menu" => [],

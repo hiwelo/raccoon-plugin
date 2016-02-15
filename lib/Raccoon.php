@@ -31,8 +31,6 @@ class Raccoon
      * Theme namespace, used mainly for translation methods (_e, __, _n, _x)
      *
      * @var   string
-     *
-     * @since 1.0.0
      */
     public $namespace = 'raccoon';
 
@@ -40,8 +38,6 @@ class Raccoon
      * Environment status (development, staging, production)
      *
      * @var   string
-     *
-     * @since 1.0.0
      */
     public $environment = 'production';
 
@@ -49,8 +45,6 @@ class Raccoon
      * Manifest informations for this theme, contain all theme configuration
      *
      * @var   array
-     *
-     * @since 1.0.0
      */
     public $manifest = [];
 

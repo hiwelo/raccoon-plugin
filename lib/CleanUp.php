@@ -31,8 +31,6 @@ class CleanUp
       * CleanUp configuration from the manifest
       *
       * @var array
-      *
-      * @since 1.0.0
       */
     private $cleanUp = [];
 
@@ -40,8 +38,6 @@ class CleanUp
      * CleanUp default configuration
      *
      * @var array
-     *
-     * @since 1.0.0
      */
     public $default = [
         "admin" => [
