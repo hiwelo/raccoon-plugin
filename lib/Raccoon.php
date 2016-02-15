@@ -782,6 +782,25 @@ class Raccoon
                 add_action('admin_bar_menu', function ($wp_admin_bar) {
                     $wp_admin_bar->remove_node('comments');
                 }, 999);
+
+                // remove comments feed
+                remove_action('wp_head', 'feed_links', 2);
+                add_action('wp_head', function () {
+                    echo '<link rel="alternate" type="application/rss+xml" ' .
+                         'title="' .
+                         get_bloginfo('sitename') .
+                         ' &raquo; ' .
+                         __('RSS Feed') .
+                         '" href="' .
+                         get_bloginfo('rss2_url') .
+                         '">';
+                }, 2);
+
+                // remove admin comments column from admin page list
+                add_filter('manage_pages_columns', function ($defaults) {
+                    unset($defaults['comments']);
+                    return $defaults;
+                });
             }
         }
     }
