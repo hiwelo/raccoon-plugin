@@ -88,6 +88,8 @@ class Raccoon
         $this->removeCommentsFeature();
         // remove widgets feature
         $this->removeWidgetsFeature();
+        // add a script for JS detection
+        $this->addJSDetectionScript();
         // remove some admin features in prod
         $this->productionFeatures();
         // add a global settings page if asked
@@ -883,6 +885,31 @@ class Raccoon
                     </script>
                 ";
             });
+        }
+    }
+
+    /**
+     * Add a script in the footer to detect if JS is available or not
+     * (by removing .no-js class from html element)
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action
+     * @uses Tools::parseBooleans()
+     */
+    private function addJSDetectionScript()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('js-detection', $this->manifest['theme-features'])
+        ) {
+            $jsFeature = $this->manifest['theme-features']['js-detection'];
+            Tools::parseBooleans($jsFeature);
+
+            if ($jsFeature === true) {
+                add_action('wp_footer', function () {
+                    echo "<script>document.getElementsByTagName('html')[0].classList.remove('no-js');</script>";
+                });
+            }
         }
     }
 
