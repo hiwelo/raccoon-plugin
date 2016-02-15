@@ -182,6 +182,8 @@ class Raccoon
             global $namespace;
             $namespace = $this->namespace;
 
+            define('THEME_NAMESPACE', $namespace);
+
             return true;
         }
     }
