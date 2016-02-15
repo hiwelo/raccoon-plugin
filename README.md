@@ -1,4 +1,4 @@
-# Raccoon WordPress starter
+# Raccoon WordPress plugin
 
 **[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** is a [_WordPress_](https://wordpress.org/) plugin which allows you to easily manage WordPress theme features with a JSON configuration file (manifest.json).
 
