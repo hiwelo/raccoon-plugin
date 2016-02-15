@@ -88,8 +88,14 @@ class Raccoon
         $this->removeCommentsFeature();
         // remove widgets feature
         $this->removeWidgetsFeature();
+        // add a script for JS detection
+        $this->addJSDetectionScript();
         // remove some admin features in prod
         $this->productionFeatures();
+        // add a global settings page if asked
+        $this->loadAllSettingsPage();
+        // add thumbnails in pages or posts lists
+        $this->addThumbnailInLists();
     }
 
     /**
@@ -778,6 +784,25 @@ class Raccoon
                 add_action('admin_bar_menu', function ($wp_admin_bar) {
                     $wp_admin_bar->remove_node('comments');
                 }, 999);
+
+                // remove comments feed
+                remove_action('wp_head', 'feed_links', 2);
+                add_action('wp_head', function () {
+                    echo '<link rel="alternate" type="application/rss+xml" ' .
+                         'title="' .
+                         get_bloginfo('sitename') .
+                         ' &raquo; ' .
+                         __('RSS Feed') .
+                         '" href="' .
+                         get_bloginfo('rss2_url') .
+                         '">';
+                }, 2);
+
+                // remove admin comments column from admin page list
+                add_filter('manage_pages_columns', function ($defaults) {
+                    unset($defaults['comments']);
+                    return $defaults;
+                });
             }
         }
     }
@@ -860,6 +885,150 @@ class Raccoon
                     </script>
                 ";
             });
+        }
+    }
+
+    /**
+     * Add a script in the footer to detect if JS is available or not
+     * (by removing .no-js class from html element)
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action
+     * @uses Tools::parseBooleans()
+     */
+    private function addJSDetectionScript()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('js-detection', $this->manifest['theme-features'])
+        ) {
+            $jsFeature = $this->manifest['theme-features']['js-detection'];
+            Tools::parseBooleans($jsFeature);
+
+            if ($jsFeature === true) {
+                add_action('wp_footer', function () {
+                    echo "<script>document.getElementsByTagName('html')[0].classList.remove('no-js');</script>";
+                });
+            }
+        }
+    }
+
+    /**
+     * Add a custom menu link for all settings page
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action
+     * @link https://developer.wordpress.org/reference/functions/add_options_page
+     * @uses Raccoon::$environment
+     * @uses Raccoon::$manifest
+     * @uses Tools::parseBooleans()
+     */
+    private function loadAllSettingsPage()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('all-settings', $this->manifest['theme-features'])
+        ) {
+            $allSettings = $this->manifest['theme-features']['all-settings'];
+            Tools::parseBooleans($allSettings);
+
+            if ($allSettings === true && $this->environment === 'development') {
+                add_action('admin_menu', function () {
+                    add_options_page(
+                        __('All Settings'),
+                        __('All Settings'),
+                        'administrator',
+                        'options.php'
+                    );
+                });
+            }
+        }
+    }
+
+    /**
+     * Add a thumbnail column in the posts or pages list
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action
+     * @link https://developer.wordpress.org/reference/functions/add_filter
+     * @uses Raccoon::$manifest
+     * @uses Tools::parseBooleans()
+     */
+    private function addThumbnailInLists()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('thumbnail-in-lists', $this->manifest['theme-features'])
+        ) {
+            $option = $this->manifest['theme-features']['thumbnail-in-lists'];
+            Tools::parseBooleans($option);
+
+            if ($option === true) {
+                add_filter('manage_posts_columns', [$this, 'addThumbColumn']);
+                add_filter('manage_pages_columns', [$this, 'addThumbColumn']);
+
+                add_action('manage_posts_custom_column', [$this, 'addThumbValue'], 10, 2);
+                add_action('manage_pages_custom_column', [$this, 'addThumbValue'], 10, 2);
+            }
+        }
+    }
+
+    /**
+     * Add a new column in an array for thumnails
+     *
+     * @param array $cols columns
+     * @return array
+     */
+    public function addThumbColumn($cols)
+    {
+        $cols['Thumbnail'] = __('Thumbnail');
+        return $cols;
+    }
+
+    /**
+     * Add a thumbnail into a list of posts or pages
+     *
+     * @param string  $column array column name
+     * @param integer $post   post id
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/get_children
+     * @link https://developer.wordpress.org/reference/functions/get_post_meta
+     * @link https://developer.wordpress.org/reference/functions/wp_get_attachment_image
+     */
+    public function addThumbValue($column, $post)
+    {
+        $width = (int) 35;
+        $height = (int) 35;
+
+        if ('thumbnail' === $column) {
+            $thumbnailID = get_post_meta($post, '_thumbnail_id', true);
+            $attachments = get_children([
+                'post_parent' => $post,
+                'post_type' =>
+                'attachment',
+                'post_mime_type' => 'image'
+            ]);
+            if ($thumbnailID) {
+                $thumbnail = wp_get_attachment_image(
+                    $thumbnailID,
+                    [$width, $height],
+                    true
+                );
+            } elseif ($attachments) {
+                foreach ($attachments as $attachmentID => $attachment) {
+                    $thumnail = wp_get_attachment_image(
+                        $attachmentID,
+                        [$width, $height],
+                        true
+                    );
+                }
+            }
+            if (isset($thumbnail) && $thumbnail) {
+                echo $thumbnail;
+            } else {
+                _e('None');
+            }
         }
     }
 }

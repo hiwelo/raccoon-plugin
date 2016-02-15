@@ -55,7 +55,13 @@ class CleanUp
             "adjacent_posts_rel_link_wp_head",
             "wp_generator",
             "wp_shortlink_wp_head",
+            "no-ftp",
+            "login-error"
         ],
+        "wp_head" => [
+            "remove-adminbar-css",
+            "emoji-css",
+        ]
     ];
 
     /**
@@ -103,6 +109,9 @@ class CleanUp
 
         // we call security clean up parts, if asked in the manifest
         $this->securityCleanUp();
+
+        // we call wp_head clean up parts, if asked in the manifest
+        $this->wpheadCleanUp();
 
         // we call default theme clean up parts, if asked in the manifest
         if (array_key_exists('themes', $this->cleanUp)) {
@@ -169,7 +178,21 @@ class CleanUp
 
         if (count($this->cleanUp['security'])) {
             foreach ($this->cleanUp['security'] as $action) {
-                remove_action('wp_head', $action);
+                switch ($action) {
+                    case 'no-ftp':
+                        define('FS_METHOD', 'direct');
+                        break;
+
+                    case 'login-error':
+                        add_filter('login_errors', function ($defaults) {
+                            return null;
+                        });
+                        break;
+
+                    default:
+                        remove_action('wp_head', $action);
+                        break;
+                }
             }
         }
     }
@@ -227,5 +250,50 @@ class CleanUp
                 </script>
             ";
         });
+    }
+
+    /**
+     * WP_head() mess clean up method
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_theme_support
+     * @link https://developer.wordpress.org/reference/functions/remove_action
+     * @link https://developer.wordpress.org/reference/functions/remove_filter
+     * @uses Tools::parseBooleans();
+     */
+    private function wpheadCleanUp()
+    {
+        if (is_array($this->cleanUp['wp_head'])) {
+            $this->cleanUp['wp_head'] = array_merge(
+                $this->default['wp_head'],
+                $this->cleanUp['wp_head']
+            );
+        } else {
+            Tools::parseBooleans($this->cleanUp['wp_head']);
+            if ($this->cleanUp['wp_head']) {
+                $this->cleanUp['wp_head'] = $this->default['wp_head'];
+            }
+        }
+
+        if (count($this->cleanUp['wp_head'])) {
+            foreach ($this->cleanUp['wp_head'] as $action) {
+                switch ($action) {
+                    case 'remove-adminbar-css':
+                        add_theme_support('admin-bar', ['callback' => '__return_false']);
+                        break;
+
+                    case 'emoji-css':
+                        remove_action('admin_print_styles', 'print_emoji_styles');
+                        remove_action('wp_head', 'print_emoji_detection_script', 7);
+                        remove_action('admin_print_scripts', 'print_emoji_detection_script');
+                        remove_action('wp_print_styles', 'print_emoji_styles');
+                        remove_filter('wp_mail', 'wp_staticize_emoji_for_email');
+                        remove_filter('the_content_feed', 'wp_staticize_emoji');
+                        remove_filter('comment_text_rss', 'wp_staticize_emoji');
+                        break;
+                }
+            }
+        }
     }
 }
