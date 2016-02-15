@@ -1,40 +1,17 @@
 # Raccoon WordPress starter
-**README.md is going to be updated.**
 
-**[Raccoon](https://github.com/hiwelo/raccoon/)** is a [_WordPress_](https://wordpress.org/) starter theme based on Composer & NPM & Babel (ES 2015 preset) & Gulp & Knacss.
+**[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** is a [_WordPress_](https://wordpress.org/) plugin which allows you to easily manage WordPress theme features with a JSON configuration file (manifest.json).
 
-[![Build Status](https://travis-ci.org/hiwelo/raccoon.svg?branch=develop)](https://travis-ci.org/hiwelo/raccoon)
+[![Build Status](https://travis-ci.org/hiwelo/raccoon-plugin.svg?branch=develop)](https://travis-ci.org/hiwelo/raccoon)
 
 
 ## Summary
   - [Requirements](#requirements)
   - [Installation](#installation)
-  - [How to work with a raccoon](#how-to-work-with-a-raccoon)
-    - [Before to work](#before-to-work)
-    - [Vendor update](#vendor-update)
-    - [Before to commit](#before-to-commit)
-    - [Documentation](#documentation)
-  - [How to code with a raccoon](#how-to-code-with-a-raccoon)
-    - [OOP PHP Class](#oop-php-class)
-    - [Raccoon loves PSR-2 Coding Standards and documentation](#raccoon-loves-psr-2-coding-standards-and-documentation)
-  - [How a raccoon can help you with _WordPress_](#how-a-raccoon-can-help-you-with-wordpress)
-    - [Configuration manifest](#configuration-manifest)
-    - [_WordPress_ theme namespace](#wordpress-theme-namespace)
-    - [Theme supports](#theme-support)
-    - [Theme features](#theme-features)
-    - [Navigations](#navigations)
-    - [Post Types](#post-types)
-      - [Create a custom post type](#create-a-custom-post-type)
-      - [Post type unregistration](#post-type-unregistration)
-    - [Post Status](#post-status)
-    - [Sidebars](#sidebars)
-    - [Widgets](#widgets)
-  - [Third part features](#third-part-features)
-    - [Raccoon loves Bedrock](#raccoon-loves-bedrock)
 
 
-## Requirements
-For its development, **[Raccoon](https://github.com/hiwelo/raccoon/)** requires:
+## Dev requirements
+For its development, **[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** requires:
   - PHP >= 5.6
   - Composer
   - Node.js with npm for package management
@@ -42,6 +19,13 @@ For its development, **[Raccoon](https://github.com/hiwelo/raccoon/)** requires:
 
 
 ## Installation
+To install the **[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** in your
+WordPress project, you can :
+
+1. Use Composer : `composer require hiwelo/raccoon-plugin`
+2. Clone the repository in your plugin directory :
+`git clone https://github.com/hiwelo/raccoon-plugin.git`
+
 It's pretty simple: you just have to clone the repository and run `composer install`
 to start all required jobs.
 ```
