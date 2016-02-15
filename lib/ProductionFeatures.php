@@ -115,11 +115,13 @@ class ProductionFeatures
                         remove_menu_page($item);
                     });
                 } elseif (is_array($item)) {
-                    $menu = array_keys()[0];
-                    foreach ($item as $submenu) {
-                        add_action('admin_menu', function () use ($menu, $submenu) {
-                            remove_submenu_page($menu, $submenu);
-                        });
+                    $menu = array_keys($item)[0];
+                    foreach ($item as $submenus) {
+                        foreach ($submenus as $submenu) {
+                            add_action('admin_menu', function () use ($menu, $submenu) {
+                                remove_submenu_page($menu, $submenu);
+                            });
+                        }
                     }
                 }
             }

@@ -8,6 +8,10 @@
 ## Summary
   - [Dev requirements](#dev-requirements)
   - [Installation](#installation)
+  - [After installation](#after-installation)
+  - [Manifest JSON file](#manifest-json-file)
+  - [Documentation](https://github.com/hiwelo/raccoon-plugin/wiki)
+  - [Third-part features](#third-part-features)
 
 
 ## Dev requirements
@@ -35,7 +39,7 @@ If you want to install this plugin with _Composer_, note that this package has a
 
 ## After installation
 
-If the plugin is in the WordPress `mu-plugins/` directory, you do not need to do something special to activate it. 
+If the plugin is in the WordPress `mu-plugins/` directory, you do not need to do something special to activate it.
 You just need to create a `manifest.json` file in your theme's root directory to use it.
 
 If the plugin is in the WordPress `plugins/` directory, do not forget to activate it in the WordPress admin panel and create the `manifest.json` file in your theme's root directory.
