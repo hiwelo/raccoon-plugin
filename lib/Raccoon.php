@@ -9,6 +9,7 @@
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hiwelo.Raccoon.Core.html
+ * @since    1.0.0
  */
 namespace Hiwelo\Raccoon;
 
@@ -22,27 +23,34 @@ namespace Hiwelo\Raccoon;
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hiwelo.Raccoon.Raccoon.html
+ * @since    1.0.0
  */
 class Raccoon
 {
     /**
      * Theme namespace, used mainly for translation methods (_e, __, _n, _x)
      *
-     * @var string
+     * @var   string
+     *
+     * @since 1.0.0
      */
     public $namespace = 'raccoon';
 
     /**
      * Environment status (development, staging, production)
      *
-     * @var string
+     * @var   string
+     *
+     * @since 1.0.0
      */
     public $environment = 'production';
 
     /**
      * Manifest informations for this theme, contain all theme configuration
      *
-     * @var array
+     * @var   array
+     *
+     * @since 1.0.0
      */
     public $manifest = [];
 
@@ -53,6 +61,8 @@ class Raccoon
      * @param string $file manifest filename
      *
      * @return void
+     *
+     * @since 1.0.0
      */
     public function __construct($file = '')
     {
@@ -102,6 +112,8 @@ class Raccoon
      * Returned array used for object debug informations
      *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function __debugInfo()
     {
@@ -115,10 +127,12 @@ class Raccoon
      *
      * @param string $file filename, must be at theme root folder
      *
-     * @return boolean true if the file exists, false otherwise
+     * @return boolean if true the file exists,
+     *                 false otherwise
      *
-     * @link https://developer.wordpress.org/reference/functions/locate_template/
-     * @uses Raccoon::$manifest
+     * @link  https://developer.wordpress.org/reference/functions/locate_template/
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
      */
     private function loadManifest($file = '')
     {
@@ -150,10 +164,13 @@ class Raccoon
      * Load the namespace specific information from the manifest
      *
      * @global string  $namespace namespace for this WordPress template
-     * @return boolean            true if a namespace is specified, false otherwise
      *
-     * @uses Raccoon::$manifest
-     * @uses Raccoon::$namespace
+     * @return boolean if true a namespace is specified,
+     *                 false otherwise
+     *
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Raccoon::$namespace
      */
     private function loadNamespace()
     {
@@ -183,9 +200,9 @@ class Raccoon
      *
      * @return void
      *
-     * @uses Raccoon::$environment
-     * @uses Raccoon::$manifest
-     * @uses Raccoon::loadDebugMethod()
+     * @since 1.0.0
+     * @uses  Raccoon::$environment
+     * @uses  Raccoon::$manifest
      */
     private function loadEnvironmentStatus()
     {
@@ -210,8 +227,9 @@ class Raccoon
      *
      * @return void
      *
-     * @uses Hiwelo\Raccoon\CleanUp
-     * @uses Raccoon::$manifest
+     * @since 1.0.0
+     * @uses  Hiwelo\Raccoon\CleanUp
+     * @uses  Raccoon::$manifest
      */
     private function loadCleanUp()
     {
@@ -227,9 +245,10 @@ class Raccoon
      *
      * @return void
      *
-     * @uses Hiwelo\Raccoon\ProductionFeatures
-     * @uses Raccoon::$environment
-     * @uses Raccoon::$manifest
+     * @since 1.0.0
+     * @uses  Hiwelo\Raccoon\ProductionFeatures
+     * @uses  Raccoon::$environment
+     * @uses  Raccoon::$manifest
      */
     private function productionFeatures()
     {
@@ -245,9 +264,11 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/load_theme_textdomain
-     * @uses Raccoon::$manifest
-     * @uses Raccoon::$namespace
+     * @link  https://developer.wordpress.org/reference/functions/get_template_directory
+     * @link  https://developer.wordpress.org/reference/functions/load_theme_textdomain
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Raccoon::$namespace
      */
     private function i18nReady()
     {
@@ -265,8 +286,10 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support
-     * @uses Raccoon::$manifest
+     * @link  https://developer.wordpress.org/reference/functions/add_theme_support
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Tools::parseBooleans()
      */
     private function loadThemeSupports()
     {
@@ -296,9 +319,10 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/register_nav_menu/
-     * @uses Raccoon::$manifest
-     * @uses Raccoon::$namespace
+     * @link  https://developer.wordpress.org/reference/functions/register_nav_menu
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Raccoon::$namespace
      */
     private function loadNavigations()
     {
@@ -318,14 +342,16 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/__/
-     * @link https://developer.wordpress.org/reference/functions/_n_noop/
-     * @link https://developer.wordpress.org/reference/functions/add_action/
-     * @link https://developer.wordpress.org/reference/functions/get_query_var/
-     * @link https://developer.wordpress.org/reference/functions/is_admin/
-     * @link https://developer.wordpress.org/reference/functions/register_post_status/
-     * @uses Raccoon::$manifest
-     * @uses Raccoon::$namespace
+     * @link  https://developer.wordpress.org/reference/functions/__
+     * @link  https://developer.wordpress.org/reference/functions/_n_noop
+     * @link  https://developer.wordpress.org/reference/functions/_x
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/get_query_var
+     * @link  https://developer.wordpress.org/reference/functions/is_admin
+     * @link  https://developer.wordpress.org/reference/functions/register_post_status
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Raccoon::$namespace
      */
     private function loadPostStatus()
     {
@@ -386,11 +412,13 @@ class Raccoon
                             echo "
                                 <script>
                                     jQuery(document).ready(function () {
-                                        jQuery('select[name=\"_status\"]').append('<option value=\"" .
-                                        $postStatus .
-                                        "\">" .
-                                        __($args['label'], $namespace) .
-                                        "</option>');
+                                        jQuery('select[name=\"_status\"]').append('" .
+                                            "<option value=\"" .
+                                            $postStatus .
+                                            "\">" .
+                                            __($args['label'], $namespace) .
+                                            "</option>" .
+                                        "');
                                     });
                                 </script>
                             ";
@@ -416,14 +444,17 @@ class Raccoon
                             echo "
                                 <script>
                                     jQuery(document).ready(function () {
-                                        jQuery('select#post_status').append('<option value\"" .
+                                        jQuery('select#post_status').append('" .
+                                            "<option value\"" .
                                             $postStatus .
                                             "\" " .
                                             $complete .
                                             ">" .
                                             __($args['label'], $namespace) .
                                             "</option>');
-                                        jQuery('.misc-pub-section label').append('" . $label . "');
+                                        jQuery('.misc-pub-section label').append('" .
+                                            $label .
+                                        "');
                                     });
                                 </script>
                             ";
@@ -449,13 +480,15 @@ class Raccoon
                             echo "
                                 <script>
                                     jQuery(document).ready(function () {
-                                        jQuery('select#post_status').append('<option value=\"" .
+                                        jQuery('select#post_status').append('" .
+                                            "<option value=\"" .
                                             $postStatus .
                                             "\" " .
                                             $complete .
                                             ">" .
                                             __($args['label'], $namespace) .
-                                            "</option>');
+                                            "</option>" .
+                                        "');
                                         jQuery('.misc-pub-section label').append('" . $label . "');
                                     });
                                 </script>
@@ -472,12 +505,12 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/__/
-     * @link https://developer.wordpress.org/reference/functions/_x/
-     * @link https://developer.wordpress.org/reference/functions/add_action/
-     * @link https://developer.wordpress.org/reference/functions/register_post_type/
-     * @uses Raccoon::$manifest
-     * @uses Raccoon::$namespace
+     * @link  https://developer.wordpress.org/reference/functions/__
+     * @link  https://developer.wordpress.org/reference/functions/_x
+     * @link  https://developer.wordpress.org/reference/functions/register_post_type
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Raccoon::$namespace
      */
     private function loadCustomPostTypes()
     {
@@ -541,9 +574,10 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_action/
-     * @link https://developer.wordpress.org/reference/functions/remove_menu_page/
-     * @uses Raccoon::$manifest
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/remove_menu_page
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
      */
     private function removePostTypes()
     {
@@ -617,10 +651,11 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/__/
-     * @link https://developer.wordpress.org/reference/functions/register_sidebar/
-     * @uses Raccoon::$manifest
-     * @uses Raccoon::$namespace
+     * @link  https://developer.wordpress.org/reference/functions/__
+     * @link  https://developer.wordpress.org/reference/functions/register_sidebar
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Raccoon::$namespace
      */
     private function loadSidebars()
     {
@@ -647,8 +682,10 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/register_widget/
-     * @uses Raccoon::$manifest
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/register_widget
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
      */
     private function loadWidgets()
     {
@@ -667,8 +704,11 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_filter/
-     * @uses Raccoon::$manifest
+     * @link  https://developer.wordpress.org/reference/functions/__
+     * @link  https://developer.wordpress.org/reference/functions/add_filter
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Raccoon::$namespace
      */
     private function loadContactMethods()
     {
@@ -687,7 +727,7 @@ class Raccoon
                 function ($contactMethods) use ($methodsToAdd, $methodsToRemove) {
                     if (count($methodsToAdd)) {
                         foreach ($methodsToAdd as $id => $method) {
-                            $contactMethods[$id] = $method;
+                            $contactMethods[$id] = __($method, $this->namespace);
                         }
                     }
 
@@ -708,15 +748,18 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_action/
-     * @link https://developer.wordpress.org/reference/functions/get_post_types/
-     * @link https://developer.wordpress.org/reference/functions/remove_menu_page/
-     * @link https://developer.wordpress.org/reference/functions/remove_meta_box/
-     * @link https://developer.wordpress.org/reference/functions/remove_post_type_support/
-     * @link https://developer.wordpress.org/reference/functions/remove_submenu_page/
-     * @link https://developer.wordpress.org/reference/functions/update_option/
-     * @uses Raccoon::$manifest
-     * @uses Tools::parseBooleans()
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/add_filter
+     * @link  https://developer.wordpress.org/reference/functions/get_bloginfo
+     * @link  https://developer.wordpress.org/reference/functions/get_post_types
+     * @link  https://developer.wordpress.org/reference/functions/remove_menu_page
+     * @link  https://developer.wordpress.org/reference/functions/remove_meta_box
+     * @link  https://developer.wordpress.org/reference/functions/remove_post_type_support
+     * @link  https://developer.wordpress.org/reference/functions/remove_submenu_page
+     * @link  https://developer.wordpress.org/reference/functions/update_option
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Tools::parseBooleans()
      */
     private function removeCommentsFeature()
     {
@@ -812,11 +855,13 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_action
-     * @link https://developer.wordpress.org/reference/functions/remove_submenu_page
-     * @link https://developer.wordpress.org/reference/functions/unregister_sidebar
-     * @link https://developer.wordpress.org/reference/functions/unregister_widget
-     * @uses Tools::parseBooleans()
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/remove_submenu_page
+     * @link  https://developer.wordpress.org/reference/functions/unregister_sidebar
+     * @link  https://developer.wordpress.org/reference/functions/unregister_widget
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Tools::parseBooleans()
      */
     private function removeWidgetsFeature()
     {
@@ -894,8 +939,10 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_action
-     * @uses Tools::parseBooleans()
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Tools::parseBooleans()
      */
     private function addJSDetectionScript()
     {
@@ -918,11 +965,12 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_action
-     * @link https://developer.wordpress.org/reference/functions/add_options_page
-     * @uses Raccoon::$environment
-     * @uses Raccoon::$manifest
-     * @uses Tools::parseBooleans()
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/add_options_page
+     * @since 1.0.0
+     * @uses  Raccoon::$environment
+     * @uses  Raccoon::$manifest
+     * @uses  Tools::parseBooleans()
      */
     private function loadAllSettingsPage()
     {
@@ -950,10 +998,11 @@ class Raccoon
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_action
-     * @link https://developer.wordpress.org/reference/functions/add_filter
-     * @uses Raccoon::$manifest
-     * @uses Tools::parseBooleans()
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/add_filter
+     * @since 1.0.0
+     * @uses  Raccoon::$manifest
+     * @uses  Tools::parseBooleans()
      */
     private function addThumbnailInLists()
     {
@@ -977,7 +1026,10 @@ class Raccoon
      * Add a new column in an array for thumnails
      *
      * @param array $cols columns
+     *
      * @return array
+     *
+     * @since 1.0.0
      */
     public function addThumbColumn($cols)
     {
@@ -990,11 +1042,13 @@ class Raccoon
      *
      * @param string  $column array column name
      * @param integer $post   post id
+     *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/get_children
-     * @link https://developer.wordpress.org/reference/functions/get_post_meta
-     * @link https://developer.wordpress.org/reference/functions/wp_get_attachment_image
+     * @link  https://developer.wordpress.org/reference/functions/get_children
+     * @link  https://developer.wordpress.org/reference/functions/get_post_meta
+     * @link  https://developer.wordpress.org/reference/functions/wp_get_attachment_image
+     * @since 1.0.0
      */
     public function addThumbValue($column, $post)
     {

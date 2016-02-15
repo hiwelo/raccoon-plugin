@@ -9,6 +9,7 @@
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.0.0
  */
 namespace Hiwelo\Raccoon;
 
@@ -22,15 +23,26 @@ namespace Hiwelo\Raccoon;
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.0.0
  */
 class ProductionFeatures
 {
     /**
       * Features configuration from the manifest
+      *
       * @var array
+      *
+      * @since 1.0.0
       */
     private $features = [];
 
+    /**
+     * Features default configuration
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
     public $default = [
         "admin-menu" => [],
     ];
@@ -42,7 +54,11 @@ class ProductionFeatures
       * @param array $configuration features configuration
       * @return void
       *
-      * @link https://codex.wordpress.org/Function_Reference/get_template_directory
+      * @link  https://codex.wordpress.org/Function_Reference/get_template_directory
+      * @since 1.0.0
+      * @uses  ProductionFeatures::addIntoAdminMenu()
+      * @uses  ProductionFeatures::removeFromAdminMenu()
+      * @uses  Tools::parseBooleans()
       */
     public function __construct($configuration = [])
     {
@@ -73,7 +89,7 @@ class ProductionFeatures
         }
 
         // add elements into admin menu
-        $this->addIntoAdminMenu();
+        // $this->addIntoAdminMenu();
 
         // remove elements from admin menu
         $this->removeFromAdminMenu();
@@ -84,10 +100,11 @@ class ProductionFeatures
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_action
-     * @link https://developer.wordpress.org/reference/functions/remove_menu_page
-     * @link https://developer.wordpress.org/reference/functions/remove_submenu_page
-     * @uses ProductionFeatures::$features
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/remove_menu_page
+     * @link  https://developer.wordpress.org/reference/functions/remove_submenu_page
+     * @since 1.0.0
+     * @uses  ProductionFeatures::$features
      */
     private function removeFromAdminMenu()
     {

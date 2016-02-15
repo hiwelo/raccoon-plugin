@@ -9,6 +9,7 @@
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.0.0
  */
 namespace Hiwelo\Raccoon;
 
@@ -22,15 +23,26 @@ namespace Hiwelo\Raccoon;
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.0.0
  */
 class CleanUp
 {
     /**
       * CleanUp configuration from the manifest
+      *
       * @var array
+      *
+      * @since 1.0.0
       */
     private $cleanUp = [];
 
+    /**
+     * CleanUp default configuration
+     *
+     * @var array
+     *
+     * @since 1.0.0
+     */
     public $default = [
         "admin" => [
             "metaboxes" => [
@@ -71,8 +83,13 @@ class CleanUp
       * @param array $configuration cleanUp configuration
       * @return void
       *
-      * @link https://codex.wordpress.org/Function_Reference/get_template_directory
-      * @uses CleanUp::adminCleanUp()
+      * @link  https://codex.wordpress.org/Function_Reference/get_template_directory
+      * @since 1.0.0
+      * @uses  CleanUp::adminCleanUp()
+      * @uses  CleanUp::defaultThemesCleanUp()
+      * @uses  CleanUp::securityCleanUp()
+      * @uses  CleanUp::wpheadCleanUp()
+      * @uses  Tools::parseBooleans()
       */
     public function __construct($configuration = [])
     {
@@ -125,6 +142,11 @@ class CleanUp
       * Clean Up WordPress Admin mess
       *
       * @return void
+      *
+      * @link  https://codex.wordpress.org/Function_Reference/add_action
+      * @link  https://codex.wordpress.org/Function_Reference/remove_meta_box
+      * @since 1.0.0
+      * @uses  Tools::parseBooleans()
       */
     public function adminCleanUp()
     {
@@ -161,6 +183,11 @@ class CleanUp
       * Clean up WordPress wp_head mess for more security
       *
       * @return void
+      *
+      * @link  https://codex.wordpress.org/Function_Reference/add_filter
+      * @link  https://codex.wordpress.org/Function_Reference/remove_action
+      * @since 1.0.0
+      * @uses  Tools::parseBooleans()
       */
     public function securityCleanUp()
     {
@@ -204,8 +231,10 @@ class CleanUp
       *
       * @return void
       *
-      * @link https://developer.wordpress.org/reference/classes/wp_theme/
-      * @link https://developer.wordpress.org/reference/functions/wp_get_themes/
+      * @link  https://developer.wordpress.org/reference/classes/wp_theme
+      * @link  https://developer.wordpress.org/reference/functions/add_action
+      * @link  https://developer.wordpress.org/reference/functions/wp_get_themes
+      * @since 1.0.0
       */
     public function defaultThemesCleanUp()
     {
@@ -257,10 +286,11 @@ class CleanUp
      *
      * @return void
      *
-     * @link https://developer.wordpress.org/reference/functions/add_theme_support
-     * @link https://developer.wordpress.org/reference/functions/remove_action
-     * @link https://developer.wordpress.org/reference/functions/remove_filter
-     * @uses Tools::parseBooleans();
+     * @link  https://developer.wordpress.org/reference/functions/add_theme_support
+     * @link  https://developer.wordpress.org/reference/functions/remove_action
+     * @link  https://developer.wordpress.org/reference/functions/remove_filter
+     * @since 1.0.0
+     * @uses  Tools::parseBooleans();
      */
     private function wpheadCleanUp()
     {

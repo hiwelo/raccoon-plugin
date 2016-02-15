@@ -9,6 +9,7 @@
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.0.0
  */
 namespace Hiwelo\Raccoon;
 
@@ -22,6 +23,7 @@ namespace Hiwelo\Raccoon;
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.0.0
  */
 class Tools
 {
@@ -32,6 +34,7 @@ class Tools
      *
      * @return boolean
      *
+     * @since  1.0.0
      * @static
      */
     public static function parseBooleans(&$value)
