@@ -58,10 +58,10 @@ class Raccoon
      *
      * @since 1.0.0
      */
-    public function __construct($file = '')
+    public function __construct()
     {
         // load theme manifest and store it
-        if (!$this->loadManifest($file)) {
+        if (!$this->loadManifest()) {
             return;
         }
 
@@ -119,8 +119,6 @@ class Raccoon
     /**
      * Load manifest.json content and store it
      *
-     * @param string $file filename, must be at theme root folder
-     *
      * @return boolean if true the file exists,
      *                 false otherwise
      *
@@ -128,9 +126,14 @@ class Raccoon
      * @since 1.0.0
      * @uses  Raccoon::$manifest
      */
-    private function loadManifest($file = '')
+    private function loadManifest()
     {
-        if (empty($file)) {
+        // check if a RACCOON constant exists
+        $customConstants = get_defined_constants();
+        if (array_key_exists('RACCOON_MANIFEST_FILE', $customConstants)
+        ) {
+            $file = $customConstants['RACCOON_MANIFEST_FILE'];
+        } else {
             $file = 'manifest.json';
         }
 
@@ -141,6 +144,7 @@ class Raccoon
             return false;
         }
 
+        // get file contents
         $file = file_get_contents($file);
 
         // verify if file isn't empty
