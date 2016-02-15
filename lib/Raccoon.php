@@ -945,6 +945,16 @@ class Raccoon
         }
     }
 
+    /**
+     * Add a thumbnail column in the posts or pages list
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_action
+     * @link https://developer.wordpress.org/reference/functions/add_filter
+     * @uses Raccoon::$manifest
+     * @uses Tools::parseBooleans()
+     */
     private function addThumbnailInLists()
     {
         if (array_key_exists('theme-features', $this->manifest)

@@ -252,6 +252,16 @@ class CleanUp
         });
     }
 
+    /**
+     * WP_head() mess clean up method
+     *
+     * @return void
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_theme_support
+     * @link https://developer.wordpress.org/reference/functions/remove_action
+     * @link https://developer.wordpress.org/reference/functions/remove_filter
+     * @uses Tools::parseBooleans();
+     */
     private function wpheadCleanUp()
     {
         if (is_array($this->cleanUp['wp_head'])) {
@@ -268,7 +278,7 @@ class CleanUp
 
         if (count($this->cleanUp['wp_head'])) {
             foreach ($this->cleanUp['wp_head'] as $action) {
-                switch($action) {
+                switch ($action) {
                     case 'remove-adminbar-css':
                         add_theme_support('admin-bar', ['callback' => '__return_false']);
                         break;
