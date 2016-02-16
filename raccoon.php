@@ -14,7 +14,7 @@
  * Plugin Name:     Raccoon WordPress Plugin
  * Plugin URI:      https://github.com/hiwelo/raccoon-plugin
  * Description:     Raccoon is a WordPress environment used to easily create new projects with a json configuration file
- * Version:         0.2.3
+ * Version:         1.1.2
  * Author:          Damien Senger
  * Author URI:      https://github.com/hiwelo
  * License:         GPL-3.0
