@@ -19,7 +19,15 @@
  */
 function __autoload($className)
 {
-    $file = './lib/' . $className . '.php';
+    $path = __FILE__;
+    $path = explode('/', $path);
+    unset($path[count($path) - 1]);
+    $path = implode('/', $path);
+
+    $className = explode('\\', $className);
+    $className = $className[count($className) - 1];
+    $file = $path . '/lib/' . $className . '.php';
+
     if (file_exists($file)) {
         require_once $file;
     }
