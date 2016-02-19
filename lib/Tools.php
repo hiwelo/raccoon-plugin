@@ -37,18 +37,8 @@ class Tools
      * @since  1.0.0
      * @static
      */
-    public static function parseBooleans(&$value)
+    public static function parseBooleans($value)
     {
-        switch ($value) {
-            case "true":
-                $value = true;
-                break;
-
-            case "false":
-                $value = false;
-                break;
-        }
-
-        return $value;
+        return ($value === 'true') ? true : false;
     }
 }
