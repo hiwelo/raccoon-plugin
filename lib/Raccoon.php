@@ -98,6 +98,8 @@ class Raccoon
         $this->loadAllSettingsPage();
         // add thumbnails in pages or posts lists
         $this->addThumbnailInLists();
+        // add svg support in WP medias library
+        $this->enableSVG();
     }
 
     /**
@@ -1016,6 +1018,32 @@ class Raccoon
 
                 add_action('manage_posts_custom_column', [$this, 'addThumbValue'], 10, 2);
                 add_action('manage_pages_custom_column', [$this, 'addThumbValue'], 10, 2);
+            }
+        }
+    }
+
+    /**
+     * Enable SVG uploads in the media library
+     *
+     * @return void
+     *
+     * @link  https://developer.wordpress.org/reference/functions/add_filter
+     * @since 1.2.0
+     * @uses  Raccoon::$manifest
+     */
+    private function enableSVG()
+    {
+        if (array_key_exists('theme-features', $this->manifest)
+            && array_key_exists('svg-upload', $this->manifest['theme-features'])
+        ) {
+            $option = $this->manifest['theme-features']['svg-upload'];
+            Tools::parseBooleans($option);
+
+            if ($option === true) {
+                add_filter('upload_mimes', function ($mimes) {
+                    $mimes['svg'] = 'image/svg+xml';
+                    return $mimes;
+                });
             }
         }
     }
