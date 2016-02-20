@@ -9,9 +9,10 @@
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
- * @since    1.0.0
+ * @since    1.2.0
  */
 namespace Hiwelo\Raccoon;
+
 use Hiwelo\Raccoon\CleanUp\Admin;
 use Hiwelo\Raccoon\CleanUp\Head;
 use Hiwelo\Raccoon\CleanUp\Security;
@@ -26,7 +27,7 @@ use Hiwelo\Raccoon\CleanUp\Security;
  * @author   Damien Senger <hi@hiwelo.co>
  * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
- * @since    1.0.0
+ * @since    1.2.0
  */
 class CleanUp
 {
@@ -56,6 +57,15 @@ class CleanUp
     {
         // load manifest with an empty configuration
         if (count($configuration) === 0) {
+            // get filename
+            if (array_key_exists('RACCOON_MANIFEST_FILE', $customConstants)
+            ) {
+                $file = $customConstants['RACCOON_MANIFEST_FILE'];
+            } else {
+                $file = 'manifest.json';
+            }
+
+            // get file path
             $file = get_template_directory() . '/' . $file;
 
             // verify if file exists
@@ -85,11 +95,22 @@ class CleanUp
         }
     }
 
+    /**
+     * Merge manifest configuration with default configuration if necessary
+     *
+     * @param array $configuration manifest configuration
+     * @param array $default       default configuration
+     *
+     * @return array merged configuration
+     *
+     * @see   Tools::parseBooleans();
+     * @since 1.2.0
+     */
     public function mergeConfigurationWithDefault($configuration, $default)
     {
         if (is_array($configuration)) {
-            return  array_merge($default, $configuration);
-        } else if (Tools::parseBooleans($configuration)) {
+            return array_merge($default, $configuration);
+        } elseif (Tools::parseBooleans($configuration)) {
             return $default;
         }
     }

@@ -1,15 +1,40 @@
 <?php
+/**
+ * WordPress security cleanup methods
+ *
+ * PHP version 5
+ *
+ * @category CleanUp
+ * @package  Raccoon
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.2.0
+ */
+
 namespace Hiwelo\Raccoon\CleanUp;
 
 /**
- * Created by PhpStorm.
- * User: alemaire
- * Date: 20/02/2016
- * Time: 00:03
+ * WordPress security cleanup methods
+ *
+ * PHP version 5
+ *
+ * @category CleanUp
+ * @package  Raccoon
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.2.0
  */
 class Security extends Cleaner
 {
-
+    /**
+     * Security cleanup default values
+     *
+     * @return array default configuration
+     *
+     * @since 1.2.0
+     */
     protected function defaultValues()
     {
         return [
@@ -28,11 +53,29 @@ class Security extends Cleaner
         ];
     }
 
+    /**
+     * WordPress security CleanUp constructor
+     *
+     * @param array $configuration cleanup configuration
+     *
+     * @see   Admin::mergeConfigurationWithDefault();
+     * @since 1.2.0
+     */
     public function __construct(array $configuration)
     {
         parent::__construct($configuration);
     }
 
+    /**
+     * Cleaning method
+     *
+     * @return void
+     *
+     * @see   Head::configuration();
+     * @see   https://developer.wordpress.org/reference/functions/add_filter
+     * @see   https://developer.wordpress.org/reference/functions/remove_action
+     * @since 1.2.0
+     */
     protected function cleaning()
     {
         foreach ($this->configuration as $action) {

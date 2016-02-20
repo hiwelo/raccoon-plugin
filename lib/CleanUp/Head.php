@@ -1,16 +1,40 @@
 <?php
+/**
+ * WordPress wp_head mess cleanup methods
+ *
+ * PHP version 5
+ *
+ * @category CleanUp
+ * @package  Raccoon
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.2.0
+ */
+
 namespace Hiwelo\Raccoon\CleanUp;
-use Hiwelo\Raccoon\CleanUp;
 
 /**
- * Created by PhpStorm.
- * User: alemaire
- * Date: 20/02/2016
- * Time: 00:03
+ * WordPress wp_head mess cleanup methods
+ *
+ * PHP version 5
+ *
+ * @category CleanUp
+ * @package  Raccoon
+ * @author   Damien Senger <hi@hiwelo.co>
+ * @license  https://www.gnu.org/licenses/gpl-3.0.html GNU General Public License 3.0
+ * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
+ * @since    1.2.0
  */
 class Head extends Cleaner
 {
-
+    /**
+     * WP_head cleanup default values
+     *
+     * @return array default configuration
+     *
+     * @since 1.2.0
+     */
     protected function defaultValues()
     {
         return [
@@ -19,11 +43,30 @@ class Head extends Cleaner
         ];
     }
 
+    /**
+     * WordPress wp_head mess CleanUp constructor
+     *
+     * @param array $configuration cleanup configuration
+     *
+     * @see   Admin::mergeConfigurationWithDefault();
+     * @since 1.2.0
+     */
     public function __construct(array $configuration)
     {
         parent::__construct($configuration);
     }
 
+    /**
+     * Cleaning method
+     *
+     * @return void
+     *
+     * @see   Head::configuration();
+     * @see   https://developer.wordpress.org/reference/functions/add_theme_support
+     * @see   https://developer.wordpress.org/reference/functions/remove_action
+     * @see   https://developer.wordpress.org/reference/functions/remove_filter
+     * @since 1.2.0
+     */
     protected function cleaning()
     {
         foreach ($this->configuration as $action) {
@@ -42,5 +85,6 @@ class Head extends Cleaner
                     remove_filter('comment_text_rss', 'wp_staticize_emoji');
                     break;
             }
-        }    }
+        }
+    }
 }
