@@ -61,7 +61,7 @@ class Security extends Cleaner
      * @see   Admin::mergeConfigurationWithDefault();
      * @since 1.2.0
      */
-    public function __construct(array $configuration)
+    public function __construct($configuration)
     {
         parent::__construct($configuration);
     }

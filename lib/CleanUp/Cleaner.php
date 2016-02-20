@@ -46,7 +46,7 @@ abstract class Cleaner
      * @see   Cleaner::mergeConfigurationWithDefault();
      * @since 1.2.0
      */
-    public function __construct(array $configuration)
+    public function __construct($configuration)
     {
         $this->configuration = $this->mergeConfigurationWithDefault($configuration, $this->defaultValues());
     }

@@ -39,6 +39,6 @@ class Tools
      */
     public static function parseBooleans($value)
     {
-        return ($value === 'true') ? true : false;
+        return ($value === 'false') ? false : (bool) $value;
     }
 }
