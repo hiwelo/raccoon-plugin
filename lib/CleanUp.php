@@ -39,6 +39,17 @@ class CleanUp
     private $cleanUp = [];
 
     /**
+     * Default configuration
+     *
+     * @var array
+     */
+    private $default = [
+        'admin' => true,
+        'wp_head' => true,
+        'security' => true,
+    ];
+
+    /**
       * Clean up class constructor, check for configuration or informations
       * in the manifest
       *
