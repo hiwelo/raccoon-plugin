@@ -125,7 +125,9 @@ class Raccoon
      */
     private function loadNamespace()
     {
-        if(!$this->manifest->existsAndNotEmpty('namespace')) return;
+        if (!$this->manifest->existsAndNotEmpty('namespace')) {
+            return;
+        }
         $this->namespace = $this->manifest->getValue('namespace');
 
         global $namespace;
@@ -162,10 +164,24 @@ class Raccoon
         }
     }
 
+    /**
+     * Extract environment status from the manifest or from the environment variables
+     *
+     * @return string environment status
+     *
+     * @see   Manifest::getValue();
+     * @since 1.2.0
+     */
     private function extractEnvironmentStatus()
     {
-        if (array_key_exists('WP_ENV', $_ENV)) return $_ENV['WP_ENV'];
-        return $this->manifest->getValue('environment-status', $this->manifest->getValue('env-status'));
+        if (array_key_exists('WP_ENV', $_ENV)) {
+            return $_ENV['WP_ENV'];
+        }
+
+        return $this->manifest->getValue(
+            'environment-status',
+            $this->manifest->getValue('env-status')
+        );
     }
 
     /**
@@ -179,8 +195,10 @@ class Raccoon
      */
     private function loadCleanUp()
     {
-        if(array_key_exists('cleanup', $this->manifest->getArrayValue('theme-features')))
-            new CleanUp($this->manifest['theme-features']['cleanup']);
+        if (array_key_exists('cleanup', $this->manifest->getArrayValue('theme-features'))) {
+            $themefeatures = $this->manifest->getArrayValue('theme-features');
+            new CleanUp($themefeatures['cleanup']);
+        }
     }
 
     /**
@@ -197,7 +215,7 @@ class Raccoon
     private function i18nReady()
     {
 
-        $i18nDirectory = get_template_directory().$this->manifest-getValue('languages-directory', '/languages');
+        $i18nDirectory = get_template_directory().$this->manifest->getValue('languages-directory', '/languages');
         load_theme_textdomain($this->namespace, $i18nDirectory);
     }
 
@@ -266,7 +284,9 @@ class Raccoon
     private function loadPostStatus()
     {
         //early termination
-        if(!$this->manifest->exists('post-status')) return;
+        if (!$this->manifest->exists('post-status')) {
+            return;
+        }
 
         // we parse namespace for further uses in anonymous functions
         $namespace = $this->namespace;
@@ -635,14 +655,15 @@ class Raccoon
      */
     private function removeCommentsFeature()
     {
-        //early termination
-        if (Tools::parseBooleans($this->manifest->getChildrenOf('theme-features')->getValue('comments')) !== false)
+        // early termination
+        if (Tools::parseBooleans($this->manifest->getChildrenOf('theme-features')->getValue('comments')) !== false) {
             return;
+        }
 
         // count options to reset at 0
-        array_map(['comments_notify', 'default_pingback_flag'], function($item) {
-            pdate_option($item, 0);
-        });
+        array_map(function ($item) {
+            update_option($item, 0);
+        }, ['comments_notify', 'default_pingback_flag']);
 
         // remove post type comment support
         foreach (get_post_types() as $postType) {
@@ -805,10 +826,17 @@ class Raccoon
      */
     private function addJSDetectionScript()
     {
-        if (Tools::parseBooleans($this->manifest->getValueOrFalse('theme-feature')))
+        if (Tools::parseBooleans($this->manifest->getValueOrFalse('theme-feature'))) {
             add_action('wp_footer', function () {
-                echo "<script>document.getElementsByTagName('html')[0].classList.remove('no-js');</script>";
+                echo "
+                    <script>
+                        document.getElementsByTagName('html')[0]
+                                .classList
+                                .remove('no-js');
+                    </script>
+                ";
             });
+        }
     }
 
     /**
@@ -851,7 +879,9 @@ class Raccoon
      */
     private function addThumbnailInLists()
     {
-        if (Tools::parseBooleans($this->manifest->getChildrenOf('theme-features')->getValueOrFalse('thumbnail-in-list'))) {
+        if (Tools::parseBooleans(
+            $this->manifest->getChildrenOf('theme-features')->getValueOrFalse('thumbnail-in-list')
+        )) {
             add_filter('manage_posts_columns', [$this, 'addThumbColumn']);
             add_filter('manage_pages_columns', [$this, 'addThumbColumn']);
 
