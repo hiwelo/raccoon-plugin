@@ -8,7 +8,6 @@
 
 namespace Hiwelo\Raccoon\Features;
 
-
 use Hiwelo\Raccoon\Manifest;
 
 interface UnregistrableInterface

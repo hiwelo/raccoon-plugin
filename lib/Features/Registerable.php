@@ -14,10 +14,10 @@ trait Registerable
 {
     protected $toAdd;
 
-    public function Register(Manifest $manifest)
+    public function register(Manifest $manifest)
     {
         $this->toAdd = $manifest->getRootItemsWithoutRemove();
-        if(!empty($this->toAdd)) {
+        if (!empty($this->toAdd)) {
             $this->enable();
         }
     }

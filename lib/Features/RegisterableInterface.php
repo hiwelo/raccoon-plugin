@@ -8,10 +8,9 @@
 
 namespace Hiwelo\Raccoon\Features;
 
-
 use Hiwelo\Raccoon\Manifest;
 
 interface RegisterableInterface
 {
-    function Register(Manifest $manifest);
+    public function register(Manifest $manifest);
 }
