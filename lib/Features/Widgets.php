@@ -14,7 +14,7 @@
 
 namespace Hiwelo\Raccoon\Features;
 
-use Hiwelo\Raccoon\Tools;
+use Hiwelo\Raccoon\WPUtils;
 
 /**
  * WordPress widgets methods
@@ -28,33 +28,9 @@ use Hiwelo\Raccoon\Tools;
  * @link     https://github.com/hiwelo/raccoon-plugin
  * @since    1.2.0
  */
-class Widgets extends Feature
+class Widgets implements RegisterableInterface
 {
-    /**
-     * Default values
-     *
-     * @return array default configuration
-     *
-     * @since 1.2.0
-     */
-    protected function defaultValues()
-    {
-        return [];
-    }
-
-    /**
-     * Feature constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   Feature::mergeConfigurationWithDefault();
-     * @since 1.2.0
-     */
-    public function __construct($configuration)
-    {
-        parent::__construct($configuration);
-    }
-
+    use Registerable;
     /**
      * Registration method
      *
@@ -64,22 +40,10 @@ class Widgets extends Feature
      * @see   Feature::registerWidget();
      * @since 1.2.0
      */
-    protected function registration()
+    protected function enable()
     {
-        foreach ($this->addItems as $widget) {
-            $this->registerWidget($widget);
+        foreach ($this->toAdd as $widget) {
+            WPUtils::registerWidget($widget);
         }
-    }
-
-    /**
-     * Unregistration method
-     *
-     * @return void
-     *
-     * @since 1.2.0
-     */
-    protected function unregistration()
-    {
-        return;
     }
 }
