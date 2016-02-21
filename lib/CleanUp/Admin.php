@@ -13,6 +13,7 @@
   */
 
 namespace Hiwelo\Raccoon\CleanUp;
+use Hiwelo\Raccoon\Manifest;
 
 /**
  * WordPress admin mess cleanup methods
@@ -49,17 +50,9 @@ class Admin extends Cleaner
         ]];
     }
 
-    /**
-     * WordPress admin mess CleanUp constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   Admin::mergeConfigurationWithDefault();
-     * @since 1.2.0
-     */
-    public function __construct($configuration)
+    protected function manifestKey()
     {
-        parent::__construct($configuration);
+        return 'admin';
     }
 
     /**
@@ -72,18 +65,13 @@ class Admin extends Cleaner
      * @see   https://developer.wordpress.org/reference/functions/remove_meta_box
      * @since 1.2.0
      */
-    protected function cleaning()
+    protected function cleaning(Manifest $manifest)
     {
-        if (array_key_exists('metaboxes', $this->configuration)
-            && is_array($this->configuration['metaboxes'])
-            && count($this->configuration['metaboxes'])
-        ) {
-            foreach ($this->configuration['metaboxes'] as $metabox) {
-                add_action('admin_menu', function () use ($metabox) {
-                    // remove comment status
-                    remove_meta_box($metabox, 'dashboard', 'core');
-                });
-            }
+        foreach ($manifest->getArrayValue('metaboxes') as $metabox) {
+            add_action('admin_menu', function () use ($metabox) {
+                // remove comment status
+                remove_meta_box($metabox, 'dashboard', 'core');
+            });
         }
     }
 }

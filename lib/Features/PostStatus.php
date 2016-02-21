@@ -14,7 +14,7 @@
 
 namespace Hiwelo\Raccoon\Features;
 
-use Hiwelo\Raccoon\Tools;
+use Hiwelo\Raccoon\WPUtils;
 
 /**
  * WordPress post status methods
@@ -28,33 +28,9 @@ use Hiwelo\Raccoon\Tools;
  * @link     https://github.com/hiwelo/raccoon-plugin
  * @since    1.2.0
  */
-class PostStatus extends Feature
+class PostStatus implements RegisterableInterface
 {
-    /**
-     * Default values
-     *
-     * @return array default configuration
-     *
-     * @since 1.2.0
-     */
-    protected function defaultValues()
-    {
-        return [];
-    }
-
-    /**
-     * Feature constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   ThemeSupports::mergeConfigurationWithDefault();
-     * @since 1.2.0
-     */
-    public function __construct($configuration)
-    {
-        parent::__construct($configuration);
-    }
-
+    use Registerable;
     /**
      * Registration method
      *
@@ -72,14 +48,14 @@ class PostStatus extends Feature
      * @see   https://developer.wordpress.org/reference/functions/is_admin
      * @since 1.2.0
      */
-    protected function registration()
+    protected function enable()
     {
         // early termination
-        if (!$this->addItems) {
+        if (!$this->toAdd) {
             return;
         }
 
-        foreach ($this->addItems as $postStatus => $args) {
+        foreach ($this->toAdd as $postStatus => $args) {
             // parsing labels value
             if (array_key_exists('label', $args)) {
                 $args['label'] = _x($args['label'], 'post', THEME_NAMESPACE);
@@ -95,7 +71,7 @@ class PostStatus extends Feature
             }
 
             // post status registration
-            $this->registerPostStatus($postStatus, $args);
+            WPUtils::registerPostStatus($postStatus, $args);
 
             // if we're in an admin panel, we do some actions after theme setup
             if (is_admin()) {
@@ -206,17 +182,5 @@ class PostStatus extends Feature
                 );
             }
         }
-    }
-
-    /**
-     * Unregistration method
-     *
-     * @return void
-     *
-     * @since 1.2.0
-     */
-    protected function unregistration()
-    {
-        return;
     }
 }

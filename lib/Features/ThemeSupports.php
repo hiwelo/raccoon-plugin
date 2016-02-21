@@ -15,6 +15,7 @@
 namespace Hiwelo\Raccoon\Features;
 
 use Hiwelo\Raccoon\Tools;
+use Hiwelo\Raccoon\WPUtils;
 
 /**
  * WordPress theme supports registration methods
@@ -28,33 +29,9 @@ use Hiwelo\Raccoon\Tools;
  * @link     https://github.com/hiwelo/raccoon-plugin
  * @since    1.2.0
  */
-class ThemeSupports extends Feature
+class ThemeSupports implements RegisterableInterface
 {
-    /**
-     * Theme supports default values
-     *
-     * @return array default configuration
-     *
-     * @since 1.2.0
-     */
-    protected function defaultValues()
-    {
-        return [];
-    }
-
-    /**
-     * Theme supports registration constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   ThemeSupports::mergeConfigurationWithDefault();
-     * @since 1.2.0
-     */
-    public function __construct($configuration)
-    {
-        parent::__construct($configuration);
-    }
-
+    use Registerable;
     /**
      * Theme supports registration method
      *
@@ -65,32 +42,14 @@ class ThemeSupports extends Feature
      * @see   https://developer.wordpress.org/reference/functions/remove_meta_box
      * @since 1.2.0
      */
-    protected function registration()
+    protected function enable()
     {
-        foreach ($this->addItems as $key => $value) {
-            switch (gettype(Tools::parseBooleans($value))) {
-                case 'boolean':
-                    if ($value === true) {
-                        $this->addThemeSupport($key);
-                    }
-                    break;
-
-                default:
-                    $this->addThemeSupport($key, $value);
-                    break;
+        foreach ($this->toAdd as $key => $value) {
+            if (gettype(Tools::parseBooleans($value)) == 'boolean' && $value === true) {
+                WPUtils::addThemeSupport($key);
+            } else {
+                WPUtils::addThemeSupport($key, $value);
             }
         }
-    }
-
-    /**
-     * Unregistration method
-     *
-     * @return void
-     *
-     * @since 1.2.0
-     */
-    protected function unregistration()
-    {
-        return;
     }
 }
