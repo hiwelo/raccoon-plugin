@@ -13,6 +13,7 @@
  */
 
 namespace Hiwelo\Raccoon\CleanUp;
+use Hiwelo\Raccoon\Manifest;
 
 /**
  * WordPress security cleanup methods
@@ -76,9 +77,9 @@ class Security extends Cleaner
      * @see   https://developer.wordpress.org/reference/functions/remove_action
      * @since 1.2.0
      */
-    protected function cleaning()
+    protected function cleaning(Manifest $manifest)
     {
-        foreach ($this->configuration as $action) {
+        foreach ($manifest as $action) {
             switch ($action) {
                 case 'no-ftp':
                     $constants = get_defined_constants();
@@ -98,5 +99,13 @@ class Security extends Cleaner
                     break;
             }
         }
+    }
+
+    /**
+     *
+     */
+    protected function manifestKey()
+    {
+        return 'security';
     }
 }
