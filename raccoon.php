@@ -31,7 +31,7 @@ if (!defined('WPINC')) {
 }
 
 // require class autoloading
-require_once 'autoload.php';
+require_once 'class-autoload.php';
 
 // we call our main plugin class
 add_action('after_setup_theme', function () {

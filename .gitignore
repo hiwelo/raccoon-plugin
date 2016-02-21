@@ -31,7 +31,9 @@ Temporary Items
 
 # Composer
 composer.phar
-vendor/
+vendor/*
+vendor/symfony/*
+!vendor/symfony/yaml/*
 
 # PHP Doc
 docs/api/
