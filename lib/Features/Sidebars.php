@@ -56,5 +56,4 @@ class Sidebars implements RegisterableInterface
             WPUtils::registerSidebar($args);
         }
     }
-
 }

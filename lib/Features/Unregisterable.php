@@ -8,17 +8,16 @@
 
 namespace Hiwelo\Raccoon\Features;
 
-
 use Hiwelo\Raccoon\Manifest;
 
 trait Unregisterable
 {
     protected $toRemove;
 
-    public function Unregister(Manifest $manifest)
+    public function unregister(Manifest $manifest)
     {
         $this->toRemove = $manifest->getArrayValue('remove');
-        if(!empty($this->toRemove)) {
+        if (!empty($this->toRemove)) {
             $this->disable();
         }
     }
