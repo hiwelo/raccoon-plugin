@@ -109,6 +109,7 @@ class Manifest
      *
      * @return array Parsed manifest
      *
+     * @see    Symfony\Component\Yaml\Parser::parse();
      * @see    https://php.net/manual/splfileinfo.getextension.php
      * @since  1.2.0
      * @static
