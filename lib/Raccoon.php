@@ -187,6 +187,6 @@ class Raccoon
     {
 
         $i18nDirectory = get_template_directory().$this->manifest->getValue('languages-directory', '/languages');
-        load_theme_textdomain($this->namespace, $i18nDirectory);
+        load_theme_textdomain(THEME_NAMESPACE, $i18nDirectory);
     }
 }

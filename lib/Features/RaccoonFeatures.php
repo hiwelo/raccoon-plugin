@@ -69,7 +69,6 @@ class RaccoonFeatures extends Feature
      */
     protected function registration()
     {
-        var_dump($this->configuration);
         foreach ($this->configuration as $option => $status) {
             Tools::parseBooleans($status);
 
