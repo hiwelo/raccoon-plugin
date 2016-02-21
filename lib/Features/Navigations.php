@@ -14,7 +14,7 @@
 
 namespace Hiwelo\Raccoon\Features;
 
-use Hiwelo\Raccoon\Tools;
+use Hiwelo\Raccoon\WPUtils;
 
 /**
  * WordPress navigations methods
@@ -28,59 +28,17 @@ use Hiwelo\Raccoon\Tools;
  * @link     https://github.com/hiwelo/raccoon-plugin
  * @since    1.2.0
  */
-class Navigations extends Feature
+class Navigations implements RegisterableInterface
 {
-    /**
-     * Navigations default values
-     *
-     * @return array default configuration
-     *
-     * @since 1.2.0
-     */
-    protected function defaultValues()
-    {
-        return [];
-    }
+    use Registerable;
 
     /**
-     * Navigations feature constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   ThemeSupports::mergeConfigurationWithDefault();
-     * @since 1.2.0
+     * {@inheritdoc}
      */
-    public function __construct($configuration)
+    protected function enable()
     {
-        parent::__construct($configuration);
-    }
-
-    /**
-     * Navigations registration method
-     *
-     * @return void
-     *
-     * @see   ThemeSupports::$configuration
-     * @see   https://developer.wordpress.org/reference/functions/add_action
-     * @see   https://developer.wordpress.org/reference/functions/remove_meta_box
-     * @since 1.2.0
-     */
-    protected function registration()
-    {
-        foreach ($this->addItems as $location => $description) {
-            $this->registerNavigation($location, __($description, THEME_NAMESPACE));
+        foreach ($this->toAdd as $location => $description) {
+            WPUtils::registerNavigation($location, __($description, THEME_NAMESPACE));
         }
-    }
-
-    /**
-     * Unregistration method
-     *
-     * @return void
-     *
-     * @since 1.2.0
-     */
-    protected function unregistration()
-    {
-        return;
     }
 }
