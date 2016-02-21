@@ -66,7 +66,7 @@ class Security extends Cleaner
      */
     protected function cleaning(Manifest $manifest)
     {
-        foreach ($manifest as $action) {
+        foreach ($manifest->asArray() as $action) {
             switch ($action) {
                 case 'no-ftp':
                     $constants = get_defined_constants();
