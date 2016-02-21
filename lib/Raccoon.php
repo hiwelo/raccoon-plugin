@@ -13,6 +13,9 @@
  */
 namespace Hiwelo\Raccoon;
 
+use Hiwelo\Raccoon\Features\Navigations;
+use Hiwelo\Raccoon\Features\ThemeSupports;
+
 /**
  * Raccoon plugin core methods
  *
@@ -58,6 +61,7 @@ class Raccoon
      */
     public function __construct()
     {
+        // load and parse manifest file
         $this->manifest = Manifest::load();
 
         // load environment status
@@ -66,12 +70,13 @@ class Raccoon
         $this->loadNamespace();
         // load internationalization if exists
         $this->i18nReady();
-        // declare all theme features
-        $this->loadThemeSupports();
+
+        // load all features or tasks asked
+        (new ThemeSupports($this->manifest->getChildrenOf('theme-support')))->register();
+        (new Navigations($this->manifest->getChildrenOf('navigations')))->register();
+
         // if asked, cleanup methods loading
         $this->loadCleanUp();
-        // declare all navigations
-        $this->loadNavigations();
         // declare all post status
         $this->loadPostStatus();
         // declare all custom post status
@@ -107,6 +112,7 @@ class Raccoon
     public function __debugInfo()
     {
         return [
+            'namespace' => $this->namespace,
             'manifest' => $this->manifest,
         ];
     }
@@ -217,50 +223,6 @@ class Raccoon
 
         $i18nDirectory = get_template_directory().$this->manifest->getValue('languages-directory', '/languages');
         load_theme_textdomain($this->namespace, $i18nDirectory);
-    }
-
-    /**
-     * Declare all features asked in the manifest
-     *
-     * @return void
-     *
-     * @link  https://developer.wordpress.org/reference/functions/add_theme_support
-     * @since 1.0.0
-     * @uses  Raccoon::$manifest
-     * @uses  Tools::parseBooleans()
-     */
-    private function loadThemeSupports()
-    {
-        foreach ($this->manifest->getArrayValue('theme-support') as $key => $value) {
-            switch (gettype(Tools::parseBooleans($value))) {
-                case "boolean":
-                    if ($value === true) {
-                        add_theme_support($key);
-                    }
-                    break;
-
-                default:
-                    add_theme_support($key, $value);
-                    break;
-            }
-        }
-    }
-
-    /**
-     * Register all navigations trom the manifest
-     *
-     * @return void
-     *
-     * @link  https://developer.wordpress.org/reference/functions/register_nav_menu
-     * @since 1.0.0
-     * @uses  Raccoon::$manifest
-     * @uses  Raccoon::$namespace
-     */
-    private function loadNavigations()
-    {
-        foreach ($this->manifest->getArrayValue('navigations') as $location => $description) {
-            register_nav_menu($location, __($description, $this->namespace));
-        }
     }
 
     /**

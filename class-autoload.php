@@ -33,6 +33,14 @@ spl_autoload_register(function ($className) {
             $file = $path . '/lib/' . $className . '.php';
             break;
 
+        case 'Hiwelo\Raccoon\CleanUp':
+            $file = $path . '/lib/CleanUp/' . $className . '.php';
+            break;
+
+        case 'Hiwelo\Raccoon\Features':
+            $file = $path . '/lib/Features/' . $className . '.php';
+            break;
+
         case 'Symfony\Component\Yaml':
             $file = $path . '/vendor/symfony/yaml/' . $className . '.php';
             break;
