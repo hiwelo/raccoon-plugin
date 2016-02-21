@@ -32,76 +32,36 @@ use Hiwelo\Raccoon\CleanUp\Security;
 class CleanUp
 {
     /**
-      * CleanUp configuration from the manifest
-      *
-      * @var array
-      */
-    private $cleanUp = [];
-
-    /**
-     * Default configuration
+     * Clean up class constructor, check for configuration or informations
+     * in the manifest
      *
-     * @var array
+     * @param array $configuration cleanUp configuration
+     * @return void
+     *
+     * @link  https://codex.wordpress.org/Function_Reference/get_template_directory
+     * @since 1.0.0
+     * @uses  CleanUp::adminCleanUp()
+     * @uses  CleanUp::defaultThemesCleanUp()
+     * @uses  CleanUp::securityCleanUp()
+     * @uses  CleanUp::wpheadCleanUp()
+     * @uses  Tools::parseBooleans()
      */
-    private $default = [
-        'admin' => true,
-        'wp_head' => true,
-        'security' => true,
-    ];
-
-    /**
-      * Clean up class constructor, check for configuration or informations
-      * in the manifest
-      *
-      * @param array $configuration cleanUp configuration
-      * @return void
-      *
-      * @link  https://codex.wordpress.org/Function_Reference/get_template_directory
-      * @since 1.0.0
-      * @uses  CleanUp::adminCleanUp()
-      * @uses  CleanUp::defaultThemesCleanUp()
-      * @uses  CleanUp::securityCleanUp()
-      * @uses  CleanUp::wpheadCleanUp()
-      * @uses  Tools::parseBooleans()
-      */
     public function __construct($configuration = [])
     {
-        // load manifest with an empty configuration
-        if (count($configuration) === 0) {
-            // get filename
-            if (array_key_exists('RACCOON_MANIFEST_FILE', $customConstants)
-            ) {
-                $file = $customConstants['RACCOON_MANIFEST_FILE'];
-            } else {
-                $file = 'manifest.json';
-            }
+        $configuration = Manifest::load()
+            ->getChildrenOf('theme-features')
+            ->getChildrenMergedWithDefaultValueOf('cleanup', [
+                'admin' => true,
+                'wp_head' => true,
+                'security' => true,
+            ]);
 
-            // get file path
-            $file = get_template_directory() . '/' . $file;
-
-            // verify if file exists
-            if (!file_exists($file)) {
-                return false;
-            }
-
-            $file = file_get_contents($file);
-            $manifest = json_decode($file, true);
-
-            if (array_key_exists('theme-features', $manifest)
-                && array_key_exists('cleanup', $manifest['theme-features'])
-            ) {
-                $configuration = $manifest['theme-features']['cleanup'];
-            }
-        }
-
-        $this->cleanUp = $this->mergeConfigurationWithDefault($configuration, $this->default);
-
-        (new Admin($this->cleanUp['admin']))->clean();
-        (new Head($this->cleanUp['wp_head']))->clean();
-        (new Security($this->cleanUp['security']))->clean();
+        (new Admin())->clean($configuration);
+        (new Head())->clean($configuration);
+        (new Security())->clean($configuration);
 
         // we call default theme clean up parts, if asked in the manifest
-        if (array_key_exists('themes', $this->cleanUp) && $this->cleanUp['themes']) {
+        if ($configuration->exists('themes') && $configuration->getValue('themes') === true) {
             $this->defaultThemesCleanUp();
         }
     }
@@ -127,17 +87,17 @@ class CleanUp
     }
 
     /**
-      * Remove default WordPress theme from admin panel lists
-      *
-      * @global array $wp_theme_directories List all themes directories
-      *
-      * @return void
-      *
-      * @link  https://developer.wordpress.org/reference/classes/wp_theme
-      * @link  https://developer.wordpress.org/reference/functions/add_action
-      * @link  https://developer.wordpress.org/reference/functions/wp_get_themes
-      * @since 1.0.0
-      */
+     * Remove default WordPress theme from admin panel lists
+     *
+     * @global array $wp_theme_directories List all themes directories
+     *
+     * @return void
+     *
+     * @link  https://developer.wordpress.org/reference/classes/wp_theme
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/wp_get_themes
+     * @since 1.0.0
+     */
     public function defaultThemesCleanUp()
     {
         // if WordPress have multiple theme directories and one looks like the
