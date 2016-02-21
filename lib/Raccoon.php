@@ -112,7 +112,7 @@ class Raccoon
     private function loadNamespace()
     {
         // we check if we already have a theme namespace constant defined
-        if (!is_null(constant('THEME_NAMESPACE'))) {
+        if (array_key_exists('THEME_NAMESPACE', get_defined_constants())) {
             return;
         }
 
