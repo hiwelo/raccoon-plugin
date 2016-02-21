@@ -119,8 +119,8 @@ abstract class Feature
     /**
      * WordPress add theme support helper
      *
-     * @param string         $feature name for the feature being added
-     * @param array|boolean  $args    optional arguments
+     * @param string        $feature name for the feature being added
+     * @param array|boolean $args    optional arguments
      *
      * @return void
      *
@@ -137,7 +137,7 @@ abstract class Feature
      * WordPress register_post_type helper
      *
      * @param string $postType post type (max 20 chars)
-     * @param array $args     an array of arguments
+     * @param array  $args     an array of arguments
      *
      * @return WP_Post registered post type object
      *
