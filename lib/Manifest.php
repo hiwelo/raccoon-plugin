@@ -14,6 +14,7 @@
 namespace Hiwelo\Raccoon;
 
 use SplFileInfo;
+use Symfony\Component\Yaml\Parser as Parser;
 
 /**
  * Raccoon plugin core methods
@@ -120,7 +121,8 @@ class Manifest
                 break;
 
             case 'yaml':
-                return [];
+                $yaml = new Parser();
+                return $yaml->parse($manifest);
                 break;
         }
     }

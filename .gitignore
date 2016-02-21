@@ -31,10 +31,11 @@ Temporary Items
 
 # Composer
 composer.phar
-vendor/
-!./vendor/autoload.php
-!./vendor/composer/*
-!./vendor/symfony/yaml/*
+vendor/*
+!vendor/autoload.php
+!vendor/composer/*
+vendor/symfony/*
+!vendor/symfony/yaml/*
 
 # PHP Doc
 docs/api/
