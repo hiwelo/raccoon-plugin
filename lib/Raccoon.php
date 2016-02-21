@@ -111,6 +111,12 @@ class Raccoon
      */
     private function loadNamespace()
     {
+        // we check if we already have a theme namespace constant defined
+        if (!is_null(constant('THEME_NAMESPACE'))) {
+            return;
+        }
+
+        // we check if a specific namespace is called
         if (!$this->manifest->existsAndNotEmpty('namespace')) {
             return;
         }

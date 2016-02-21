@@ -85,13 +85,8 @@ class RaccoonFeatures extends Feature
                     }
                     break;
 
-                case 'widgets':
-                    if ($status === false) {
-                        $this->removeWidgets();
-                    }
-                    break;
-
                 case 'widget':
+                case 'widgets':
                     if ($status === false) {
                         $this->removeWidgets();
                     }
