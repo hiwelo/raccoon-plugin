@@ -33,7 +33,7 @@ class ContactMethods implements RegisterableInterface, UnregistrableInterface
     /**
      * {@inheritdoc}
      */
-    public function enable()
+    protected function enable()
     {
         foreach ($this->toAdd as $id => $name) {
             add_filter('user_contactmethods', function ($contactMethods) use ($id, $name) {
@@ -46,7 +46,7 @@ class ContactMethods implements RegisterableInterface, UnregistrableInterface
     /**
      * {@inheritdoc}
      */
-    public function disable()
+    protected function disable()
     {
         foreach ($this->toRemove as $id) {
             add_filter('user_contactmethods', function ($contactMethods) use ($id) {

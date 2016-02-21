@@ -9,7 +9,9 @@
 namespace Hiwelo\Raccoon\Features;
 
 
+use Hiwelo\Raccoon\Manifest;
+
 interface UnregistrableInterface
 {
-    public function unregister();
+    public function unregister(Manifest $manifest);
 }
