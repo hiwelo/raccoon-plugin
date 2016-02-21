@@ -32,24 +32,6 @@ use Hiwelo\Raccoon\CleanUp\Security;
 class CleanUp
 {
     /**
-      * CleanUp configuration from the manifest
-      *
-      * @var array
-      */
-    private $cleanUp = [];
-
-    /**
-     * Default configuration
-     *
-     * @var array
-     */
-    private $default = [
-        'admin' => true,
-        'wp_head' => true,
-        'security' => true,
-    ];
-
-    /**
       * Clean up class constructor, check for configuration or informations
       * in the manifest
       *
@@ -66,39 +48,17 @@ class CleanUp
       */
     public function __construct($configuration = [])
     {
-        // load manifest with an empty configuration
-        if (count($configuration) === 0) {
-            // get filename
-            if (array_key_exists('RACCOON_MANIFEST_FILE', $customConstants)
-            ) {
-                $file = $customConstants['RACCOON_MANIFEST_FILE'];
-            } else {
-                $file = 'manifest.json';
-            }
+        $configuration = Manifest::load()
+            ->getChildrenOf('theme-features')
+            ->getChildrenMergedWithDefaultValueOf('cleanup', [
+                'admin' => true,
+                'wp_head' => true,
+                'security' => true,
+            ]);
 
-            // get file path
-            $file = get_template_directory() . '/' . $file;
-
-            // verify if file exists
-            if (!file_exists($file)) {
-                return false;
-            }
-
-            $file = file_get_contents($file);
-            $manifest = json_decode($file, true);
-
-            if (array_key_exists('theme-features', $manifest)
-                && array_key_exists('cleanup', $manifest['theme-features'])
-            ) {
-                $configuration = $manifest['theme-features']['cleanup'];
-            }
-        }
-
-        $this->cleanUp = $this->mergeConfigurationWithDefault($configuration, $this->default);
-
-        (new Admin($this->cleanUp['admin']))->clean();
-        (new Head($this->cleanUp['wp_head']))->clean();
-        (new Security($this->cleanUp['security']))->clean();
+        (new Admin())->clean($configuration);
+        (new Head())->clean($configuration);
+        (new Security())->clean($configuration);
 
         // we call default theme clean up parts, if asked in the manifest
         if (array_key_exists('themes', $this->cleanUp) && $this->cleanUp['themes']) {

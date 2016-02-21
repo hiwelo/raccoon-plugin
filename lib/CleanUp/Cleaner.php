@@ -14,6 +14,7 @@
 
 namespace Hiwelo\Raccoon\CleanUp;
 
+use Hiwelo\Raccoon\Manifest;
 use Hiwelo\Raccoon\Tools;
 
 /**
@@ -31,27 +32,6 @@ use Hiwelo\Raccoon\Tools;
 abstract class Cleaner
 {
     /**
-     * Configuration array
-     *
-     * @var array
-     */
-    protected $configuration;
-
-    /**
-     * WordPress cleanup constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   Cleaner::defaultValues();
-     * @see   Cleaner::mergeConfigurationWithDefault();
-     * @since 1.2.0
-     */
-    public function __construct($configuration)
-    {
-        $this->configuration = $this->mergeConfigurationWithDefault($configuration, $this->defaultValues());
-    }
-
-    /**
      * Cleaning method
      *
      * @return void
@@ -60,33 +40,17 @@ abstract class Cleaner
      * @see   Cleaner::configuration();
      * @since 1.2.0
      */
-    public function clean()
+    public function clean(Manifest $manifest)
     {
-        if (empty($this->configuration)) {
+        if ($manifest->isEmpty()) {
             return;
         }
 
-        $this->cleaning();
-    }
-
-    /**
-     * Merge asked configuration with default configuration
-     *
-     * @param array $configuration asked configuration from the manifest
-     * @param array $default       default configuration
-     *
-     * @return array merged configuration
-     *
-     * @see   Tools::parseBooleans();
-     * @since 1.2.0
-     */
-    protected function mergeConfigurationWithDefault($configuration, $default)
-    {
-        if (is_array($configuration)) {
-            return  array_merge($default, $configuration);
-        } elseif (Tools::parseBooleans($configuration)) {
-            return $default;
-        }
+        $this->cleaning(
+            $manifest->getChildrenMergedWithDefaultValueOf(
+                $this->manifestKey(), $this->defaultValues()
+            )
+        );
     }
 
     /**
@@ -99,11 +63,16 @@ abstract class Cleaner
     abstract protected function defaultValues();
 
     /**
+     *
+     */
+    abstract protected function manifestKey();
+
+    /**
      * Default cleaning method
      *
      * @return void
      *
      * @since 1.2.0
      */
-    abstract protected function cleaning();
+    abstract protected function cleaning(Manifest $manifest);
 }

@@ -13,6 +13,7 @@
  */
 
 namespace Hiwelo\Raccoon\CleanUp;
+use Hiwelo\Raccoon\Manifest;
 
 /**
  * WordPress wp_head mess cleanup methods
@@ -44,19 +45,6 @@ class Head extends Cleaner
     }
 
     /**
-     * WordPress wp_head mess CleanUp constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   Admin::mergeConfigurationWithDefault();
-     * @since 1.2.0
-     */
-    public function __construct($configuration)
-    {
-        parent::__construct($configuration);
-    }
-
-    /**
      * Cleaning method
      *
      * @return void
@@ -67,9 +55,9 @@ class Head extends Cleaner
      * @see   https://developer.wordpress.org/reference/functions/remove_filter
      * @since 1.2.0
      */
-    protected function cleaning()
+    protected function cleaning(Manifest $manifest)
     {
-        foreach ($this->configuration as $action) {
+        foreach ($manifest->asArray() as $action) {
             switch ($action) {
                 case 'remove-adminbar-css':
                     add_theme_support('admin-bar', ['callback' => '__return_false']);
@@ -86,5 +74,13 @@ class Head extends Cleaner
                     break;
             }
         }
+    }
+
+    /**
+     *
+     */
+    protected function manifestKey()
+    {
+        return 'wp_head';
     }
 }
