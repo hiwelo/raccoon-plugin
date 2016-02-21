@@ -13,6 +13,7 @@
  */
 
 namespace Hiwelo\Raccoon\CleanUp;
+
 use Hiwelo\Raccoon\Manifest;
 
 /**

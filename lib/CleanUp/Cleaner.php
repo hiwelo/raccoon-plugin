@@ -48,7 +48,8 @@ abstract class Cleaner
 
         $this->cleaning(
             $manifest->getChildrenMergedWithDefaultValueOf(
-                $this->manifestKey(), $this->defaultValues()
+                $this->manifestKey(),
+                $this->defaultValues()
             )
         );
     }

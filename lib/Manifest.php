@@ -34,7 +34,7 @@ class Manifest
     /**
      * @var Manifest
      */
-    static $instance = null;
+    protected static $instance = null;
 
     /**
      * Load a manifest and create a Manifest object
@@ -80,7 +80,7 @@ class Manifest
      */
     public static function load()
     {
-        if(is_null(self::$instance)) {
+        if (is_null(self::$instance)) {
             self::$instance = self::create();
         }
 
