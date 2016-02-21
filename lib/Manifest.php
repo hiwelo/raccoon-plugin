@@ -223,6 +223,21 @@ class Manifest
     }
 
     /**
+     * Get an array of all root object items without 'remove' key
+     *
+     * @return array manifest's array without 'remove' key
+     *
+     * @see   Manifest::$manifest
+     * @since 1.2.0
+     */
+    public function getRootItemsWithoutRemove()
+    {
+        $rootItems = $this->manifest;
+        unset($rootItems['remove']);
+        return $rootItems;
+    }
+
+    /**
      * Check if a key exist in the manifest
      *
      * @param string $key searched key

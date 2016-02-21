@@ -1,6 +1,6 @@
 <?php
  /**
-  * WordPress theme supports registration methods
+  * WordPress sidebars methods
   *
   * PHP version 5
   *
@@ -17,7 +17,7 @@ namespace Hiwelo\Raccoon\Features;
 use Hiwelo\Raccoon\Tools;
 
 /**
- * WordPress theme supports registration methods
+ * WordPress sidebars methods
  *
  * PHP version 5
  *
@@ -28,10 +28,10 @@ use Hiwelo\Raccoon\Tools;
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
  * @since    1.2.0
  */
-class ThemeSupports extends Feature
+class Sidebars extends Feature
 {
     /**
-     * Theme supports default values
+     * Default values
      *
      * @return array default configuration
      *
@@ -43,7 +43,7 @@ class ThemeSupports extends Feature
     }
 
     /**
-     * Theme supports registration constructor
+     * Feature constructor
      *
      * @param array $configuration cleanup configuration
      *
@@ -56,29 +56,27 @@ class ThemeSupports extends Feature
     }
 
     /**
-     * Theme supports registration method
+     * Registration method
      *
      * @return void
      *
-     * @see   ThemeSupports::$configuration
-     * @see   https://developer.wordpress.org/reference/functions/add_action
-     * @see   https://developer.wordpress.org/reference/functions/remove_meta_box
+     * @see   Feature::$configuration
+     * @see   https://developer.wordpress.org/reference/functions/__
+     * @see   https://developer.wordpress.org/reference/functions/register_sidebar
      * @since 1.2.0
      */
     protected function registration()
     {
-        foreach ($this->addItems as $key => $value) {
-            switch (gettype(Tools::parseBooleans($value))) {
-                case 'boolean':
-                    if ($value === true) {
-                        $this->addThemeSupport($key);
-                    }
-                    break;
-
-                default:
-                    $this->addThemeSupport($key, $value);
-                    break;
+        foreach ($this->addItems as $args) {
+            // parsing arguments to add translation for some keys
+            foreach ($args as $key => $value) {
+                $i18nKeys = ['name', 'description'];
+                if (in_array($key, $i18nKeys)) {
+                    $args[$key] = __($value, THEME_NAMESPACE);
+                }
             }
+            // sidebar registration
+            $this->registerSidebar($args);
         }
     }
 

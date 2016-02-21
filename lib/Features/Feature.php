@@ -35,7 +35,21 @@ abstract class Feature
      *
      * @var array
      */
-    protected $configuration;
+    protected $configuration = [];
+
+    /**
+     * Items to remove
+     *
+     * @var array
+     */
+    protected $removeItems = [];
+
+    /**
+     * Items to add
+     *
+     * @var array
+     */
+    protected $addItems = [];
 
     /**
      * WordPress feature constructor
@@ -49,6 +63,8 @@ abstract class Feature
     public function __construct($configuration)
     {
         $this->configuration = $configuration->manifest;
+        $this->addItems = $configuration->getRootItemsWithoutRemove();
+        $this->removeItems = $configuration->getArrayValue('remove');
     }
 
     /**
@@ -75,11 +91,29 @@ abstract class Feature
      */
     public function register()
     {
-        if (empty($this->configuration)) {
+        if (empty($this->addItems)) {
             return;
         }
 
         $this->registration();
+    }
+
+    /**
+     * Unregistration method
+     *
+     * @return void
+     *
+     * @see   Register::configuration();
+     * @see   Register::registration();
+     * @since 1.2.0
+     */
+    public function unregister()
+    {
+        if (empty($this->removeItems)) {
+            return;
+        }
+
+        $this->unregistration();
     }
 
     /**
@@ -100,6 +134,22 @@ abstract class Feature
     }
 
     /**
+     * WordPress register_post_type helper
+     *
+     * @param string $postType post type (max 20 chars)
+     * @param array $args     an array of arguments
+     *
+     * @return WP_Post registered post type object
+     *
+     * @see   https://codex.wordpress.org/Function_Reference/register_post_type
+     * @since 1.2.0
+     */
+    protected function registerPostType($postType, $args)
+    {
+        return register_post_type($postType, $args);
+    }
+
+    /**
      * WordPress register_nav_menu helper
      *
      * @param string $location    menu location identifier, like a slug
@@ -114,6 +164,52 @@ abstract class Feature
     protected function registerNavigation($location, $description)
     {
         register_nav_menu($location, $description);
+    }
+
+    /**
+     * WordPress register_post_status helper
+     *
+     * @param string $postStatus name of the post status, max length 20 chars
+     * @param array  $args       an array of arguments for this post status
+     *
+     * @return object
+     *
+     * @see   https://codex.wordpress.org/Function_Reference/register_post_status
+     * @since 1.2.0
+     */
+    protected function registerPostStatus($postStatus, $args)
+    {
+        return register_post_status($postStatus, $args);
+    }
+
+    /**
+     * WordPress register_sidebar helper
+     *
+     * @param array $args builds sidebar based off of "name" and "id" values
+     *
+     * @return string sidebar id
+     *
+     * @see   https://codex.wordpress.org/Function_Reference/register_sidebar
+     * @since 1.2.0
+     */
+    protected function registerSidebar($args)
+    {
+        return register_sidebar($args);
+    }
+
+    /**
+     * WordPress register_widget helper
+     *
+     * @param string $widgetClass the name of the class that extends WP_Widget
+     *
+     * @return void
+     *
+     * @see   https://codex.wordpress.org/Function_Reference/register_widget
+     * @since 1.2.0
+     */
+    protected function registerWidget($widgetClass)
+    {
+        return register_widget($widgetClass);
     }
 
     /**
@@ -133,4 +229,13 @@ abstract class Feature
      * @since 1.2.0
      */
     abstract protected function registration();
+
+    /**
+     * Default unregistration method
+     *
+     * @return void
+     *
+     * @since 1.2.0
+     */
+    abstract protected function unregistration();
 }

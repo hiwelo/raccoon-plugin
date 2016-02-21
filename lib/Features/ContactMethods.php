@@ -1,6 +1,6 @@
 <?php
  /**
-  * WordPress theme supports registration methods
+  * WordPress contact methods methods
   *
   * PHP version 5
   *
@@ -17,7 +17,7 @@ namespace Hiwelo\Raccoon\Features;
 use Hiwelo\Raccoon\Tools;
 
 /**
- * WordPress theme supports registration methods
+ * WordPress contact methods methods
  *
  * PHP version 5
  *
@@ -28,10 +28,10 @@ use Hiwelo\Raccoon\Tools;
  * @link     ./docs/api/classes/Hwlo.Raccoon.Core.html
  * @since    1.2.0
  */
-class ThemeSupports extends Feature
+class ContactMethods extends Feature
 {
     /**
-     * Theme supports default values
+     * Default values
      *
      * @return array default configuration
      *
@@ -43,11 +43,11 @@ class ThemeSupports extends Feature
     }
 
     /**
-     * Theme supports registration constructor
+     * Feature constructor
      *
      * @param array $configuration cleanup configuration
      *
-     * @see   ThemeSupports::mergeConfigurationWithDefault();
+     * @see   Feature::mergeConfigurationWithDefault();
      * @since 1.2.0
      */
     public function __construct($configuration)
@@ -56,29 +56,21 @@ class ThemeSupports extends Feature
     }
 
     /**
-     * Theme supports registration method
+     * Registration method
      *
      * @return void
      *
-     * @see   ThemeSupports::$configuration
-     * @see   https://developer.wordpress.org/reference/functions/add_action
-     * @see   https://developer.wordpress.org/reference/functions/remove_meta_box
+     * @see   Feature::$addItems
+     * @see   https://codex.wordpress.org/Function_Reference/add_filter
      * @since 1.2.0
      */
     protected function registration()
     {
-        foreach ($this->addItems as $key => $value) {
-            switch (gettype(Tools::parseBooleans($value))) {
-                case 'boolean':
-                    if ($value === true) {
-                        $this->addThemeSupport($key);
-                    }
-                    break;
-
-                default:
-                    $this->addThemeSupport($key, $value);
-                    break;
-            }
+        foreach ($this->addItems as $id => $name) {
+            add_filter('user_contactmethods', function ($contactMethods) use ($id, $name) {
+                $contactMethods[$id] = __($name, THEME_NAMESPACE);
+                return $contactMethods;
+            });
         }
     }
 
@@ -87,10 +79,17 @@ class ThemeSupports extends Feature
      *
      * @return void
      *
+     * @see   Feature::$removeItems
+     * @see   https://codex.wordpress.org/Function_Reference/add_filter
      * @since 1.2.0
      */
     protected function unregistration()
     {
-        return;
+        foreach ($this->removeItems as $id) {
+            add_filter('user_contactmethods', function ($contactMethods) use ($id) {
+                unset($contactMethods[$id]);
+                return $contactMethods;
+            });
+        }
     }
 }

@@ -67,8 +67,20 @@ class Navigations extends Feature
      */
     protected function registration()
     {
-        foreach ($this->configuration as $location => $description) {
+        foreach ($this->addItems as $location => $description) {
             $this->registerNavigation($location, __($description, THEME_NAMESPACE));
         }
+    }
+
+    /**
+     * Unregistration method
+     *
+     * @return void
+     *
+     * @since 1.2.0
+     */
+    protected function unregistration()
+    {
+        return;
     }
 }
