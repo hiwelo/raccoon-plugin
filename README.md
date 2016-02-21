@@ -1,6 +1,6 @@
 # Raccoon WordPress plugin
 
-**[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** is a [_WordPress_](https://wordpress.org/) plugin which allows you to easily manage WordPress theme features with a JSON configuration file (manifest.json).
+**[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** is a [_WordPress_](https://wordpress.org/) plugin which allows you to easily manage WordPress theme features with a JSON or YAML configuration file.
 
 [![Build Status](https://travis-ci.org/hiwelo/raccoon-plugin.svg)](https://travis-ci.org/hiwelo/raccoon)
 
@@ -9,7 +9,7 @@
   - [Dev requirements](#dev-requirements)
   - [Installation](#installation)
   - [After installation](#after-installation)
-  - [Manifest JSON file](#manifest-json-file)
+  - [Manifest JSON or YAML file](#manifest-json-or-yaml-file)
   - [Documentation](https://github.com/hiwelo/raccoon-plugin/wiki)
   - [Third-part features](#third-part-features)
 
@@ -18,7 +18,6 @@
 For its development, **[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** requires:
   - PHP >= 5.6
   - Composer
-  - Node.js with npm for package management
   - WordPress >= 4.4
 
 
@@ -45,9 +44,9 @@ You just need to create a `manifest.json` file in your theme's root directory to
 If the plugin is in the WordPress `plugins/` directory, do not forget to activate it in the WordPress admin panel and create the `manifest.json` file in your theme's root directory.
 
 
-## Manifest JSON file
+## Manifest JSON or YAML file
 
-Once you created the `manifest.json` file in your theme's root directory, you can use in this file all features described in [this project's wiki](https://github.com/hiwelo/raccoon-plugin/wiki).
+Once you created the JSON or YAML file in your theme's root directory, you can use in this file all features described in [this project's wiki](https://github.com/hiwelo/raccoon-plugin/wiki).
 
 
 ## Third-part features
