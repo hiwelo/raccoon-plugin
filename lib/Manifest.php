@@ -30,6 +30,12 @@ use Symfony\Component\Yaml\Parser as Parser;
  */
 class Manifest
 {
+
+    /**
+     * @var Manifest
+     */
+    static $instance = null;
+
     /**
      * Load a manifest and create a Manifest object
      *
@@ -45,7 +51,7 @@ class Manifest
      * @since  1.2.0
      * @static
      */
-    public static function load()
+    protected static function create()
     {
         $file = self::filePath(
             self::getValueOrDefault(
@@ -64,7 +70,21 @@ class Manifest
         if (empty($manifest)) {
             throw \LogicException('manifest file doesn\'t exists or is empty !');
         }
+
         return new self($manifest);
+    }
+
+    /**
+     * @return Manifest
+     * @throws \LogicException
+     */
+    public static function load()
+    {
+        if(is_null(self::$instance)) {
+            self::$instance = self::create();
+        }
+
+        return self::$instance;
     }
 
     /**
@@ -138,7 +158,7 @@ class Manifest
      * @see   Manifest::$manifest
      * @since 1.2.0
      */
-    public function __construct($manifest)
+    private function __construct($manifest)
     {
         $this->manifest = $manifest;
     }
@@ -185,9 +205,25 @@ class Manifest
      * @see   Manifest::getArrayValue();
      * @since 1.2.0
      */
-    public function getChildrenOf($key)
+    public function getChildrenOf($key, array $default = [])
     {
-        return new self($this->getArrayValue($key));
+        return new self($this->getArrayValue($key, $default));
+    }
+
+    /**
+     * Get a children information from the manifest
+     *
+     * @param string $key manifest searched key
+     *
+     * @return Manifest
+     *
+     * @see   Manifest
+     * @see   Manifest::getArrayValue();
+     * @since 1.2.0
+     */
+    public function getChildrenMergedWithDefaultValueOf($key, array $default = [])
+    {
+        return new self($this->getArrayValueMergedWithDefault($key, $default));
     }
 
     /**
@@ -200,9 +236,37 @@ class Manifest
      * @see   Manifest::getValue();
      * @since 1.2.0
      */
-    public function getArrayValue($key)
+    public function getArrayValue($key, array $default = [])
     {
-        return $this->getValue($key, []);
+        return $this->getValue($key, $default);
+    }
+
+    public function isEmpty()
+    {
+        return empty($this->manifest);
+    }
+
+    /**
+     * Get an array value from the manifest without default value
+     *
+     * @param string $key manifest searched data
+     *
+     * @return array searched array
+     *
+     * @see   Manifest::getValue();
+     * @since 1.2.0
+     */
+    public function getArrayValueMergedWithDefault($key, array $default = [])
+    {
+        $configuration = $this->getValue($key, $default);
+
+        if (is_array($configuration)) {
+            return array_merge($default, $configuration);
+        } elseif (Tools::parseBooleans($configuration)) {
+            return $default;
+        }
+
+        return [];
     }
 
     /**
@@ -222,6 +286,11 @@ class Manifest
         return $a;
     }
 
+    public function asArray()
+    {
+        return (array)$this->manifest;
+    }
+
     /**
      * Get an array of all root object items without 'remove' key
      *
@@ -232,7 +301,7 @@ class Manifest
      */
     public function getRootItemsWithoutRemove()
     {
-        $rootItems = $this->manifest;
+        $rootItems = $this->asArray();
         unset($rootItems['remove']);
         return $rootItems;
     }
