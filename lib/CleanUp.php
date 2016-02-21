@@ -61,7 +61,7 @@ class CleanUp
         (new Security())->clean($configuration);
 
         // we call default theme clean up parts, if asked in the manifest
-        if (array_key_exists('themes', $this->cleanUp) && $this->cleanUp['themes']) {
+        if ($configuration->exists('themes') && $configuration->getValue('themes') === true) {
             $this->defaultThemesCleanUp();
         }
     }
