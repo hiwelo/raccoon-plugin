@@ -32,20 +32,20 @@ use Hiwelo\Raccoon\CleanUp\Security;
 class CleanUp
 {
     /**
-      * Clean up class constructor, check for configuration or informations
-      * in the manifest
-      *
-      * @param array $configuration cleanUp configuration
-      * @return void
-      *
-      * @link  https://codex.wordpress.org/Function_Reference/get_template_directory
-      * @since 1.0.0
-      * @uses  CleanUp::adminCleanUp()
-      * @uses  CleanUp::defaultThemesCleanUp()
-      * @uses  CleanUp::securityCleanUp()
-      * @uses  CleanUp::wpheadCleanUp()
-      * @uses  Tools::parseBooleans()
-      */
+     * Clean up class constructor, check for configuration or informations
+     * in the manifest
+     *
+     * @param array $configuration cleanUp configuration
+     * @return void
+     *
+     * @link  https://codex.wordpress.org/Function_Reference/get_template_directory
+     * @since 1.0.0
+     * @uses  CleanUp::adminCleanUp()
+     * @uses  CleanUp::defaultThemesCleanUp()
+     * @uses  CleanUp::securityCleanUp()
+     * @uses  CleanUp::wpheadCleanUp()
+     * @uses  Tools::parseBooleans()
+     */
     public function __construct($configuration = [])
     {
         $configuration = Manifest::load()
@@ -87,17 +87,17 @@ class CleanUp
     }
 
     /**
-      * Remove default WordPress theme from admin panel lists
-      *
-      * @global array $wp_theme_directories List all themes directories
-      *
-      * @return void
-      *
-      * @link  https://developer.wordpress.org/reference/classes/wp_theme
-      * @link  https://developer.wordpress.org/reference/functions/add_action
-      * @link  https://developer.wordpress.org/reference/functions/wp_get_themes
-      * @since 1.0.0
-      */
+     * Remove default WordPress theme from admin panel lists
+     *
+     * @global array $wp_theme_directories List all themes directories
+     *
+     * @return void
+     *
+     * @link  https://developer.wordpress.org/reference/classes/wp_theme
+     * @link  https://developer.wordpress.org/reference/functions/add_action
+     * @link  https://developer.wordpress.org/reference/functions/wp_get_themes
+     * @since 1.0.0
+     */
     public function defaultThemesCleanUp()
     {
         // if WordPress have multiple theme directories and one looks like the
