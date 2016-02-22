@@ -48,6 +48,9 @@ spl_autoload_register(function ($className) {
         case 'Symfony\Component\Yaml\Exception':
             $file = $path . '/vendor/symfony/yaml/Exception/' . $className . '.php';
             break;
+        
+        default:
+            return;
     }
 
     if (file_exists($file)) {
