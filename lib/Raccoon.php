@@ -118,9 +118,10 @@ class Raccoon
 
         // we check if a specific namespace is called
         if (!$this->manifest->existsAndNotEmpty('namespace')) {
-            return;
+            $manifestNamespace = 'raccoon';
+        } else {
+            $manifestNamespace = $this->manifest->getValue('namespace');
         }
-        $manifestNamespace = $this->manifest->getValue('namespace');
 
         // define a PHP constant for the namespace
         define('THEME_NAMESPACE', $manifestNamespace);
