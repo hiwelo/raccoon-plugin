@@ -68,7 +68,7 @@ class Manifest
         $manifest = self::parseManifest($manifest, $fileinfo);
 
         if (empty($manifest)) {
-            throw \LogicException('manifest file doesn\'t exists or is empty !');
+            return;
         }
 
         return new self($manifest);
