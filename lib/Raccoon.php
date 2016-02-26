@@ -63,6 +63,11 @@ class Raccoon
         // load and parse manifest file
         $this->manifest = Manifest::load();
 
+        // early termination
+        if (is_null($this->manifest)) {
+            return;
+        }
+
         // load environment status
         $this->loadEnvironmentStatus();
         // load namespace if a specific one is specified
