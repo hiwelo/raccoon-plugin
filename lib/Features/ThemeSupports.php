@@ -79,6 +79,7 @@ class ThemeSupports extends Feature
                     if ($value === 'true') {
                         $this->addThemeSupport($key);
                     }
+                    break;
 
                 default:
                     $this->addThemeSupport($key, $value);
