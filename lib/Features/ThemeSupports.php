@@ -68,9 +68,15 @@ class ThemeSupports extends Feature
     protected function registration()
     {
         foreach ($this->addItems as $key => $value) {
-            switch (gettype(Tools::parseBooleans($value))) {
+            switch (gettype($value)) {
                 case 'boolean':
                     if ($value === true) {
+                        $this->addThemeSupport($key);
+                    }
+                    break;
+
+                case 'string':
+                    if ($value === 'true') {
                         $this->addThemeSupport($key);
                     }
                     break;

@@ -128,9 +128,13 @@ abstract class Feature
      * @see   https://codex.wordpress.org/Function_Reference/add_theme_support
      * @since 1.2.0
      */
-    protected function addThemeSupport($feature, $args = true)
+    protected function addThemeSupport($feature, $args = null)
     {
-        add_theme_support($feature, $args);
+        if (is_null($args)) {
+            add_theme_support($feature);
+        } else {
+            add_theme_support($feature, $args);
+        }
     }
 
     /**
