@@ -1,11 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: alemaire
- * Date: 21/02/2016
- * Time: 16:43
- */
-
 namespace Hiwelo\Raccoon;
 
 class WPUtils

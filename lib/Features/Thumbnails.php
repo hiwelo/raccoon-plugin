@@ -47,7 +47,7 @@ class Thumbnails implements RegisterableInterface
                 $sizeName,
                 $sizeArgs['width'],
                 $sizeArgs['height'],
-                $sizeArgs['crop']
+                $sizeArgs['crop'],
             );
         }
     }
