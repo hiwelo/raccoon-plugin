@@ -51,6 +51,7 @@ class RaccoonFeatures implements RegisterableInterface
 
             switch ($option) {
                 case 'svg-upload':
+                case 'svg-uploads':
                     if ($status === true) {
                         $this->enableSVG();
                     }
