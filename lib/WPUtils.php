@@ -10,6 +10,21 @@ namespace Hiwelo\Raccoon;
 
 class WPUtils
 {
+    /**
+     * WordPress add_image_size() helper
+     *
+     * @param  string        $name   Image size identifier
+     * @param  integer       $width  Image width in pixels
+     * @param  integer       $height Image height in pixels
+     * @param  boolean|array $crop   Whether to crop images to specified width and height or resize
+     * @return void
+     * @see    https://developer.wordpress.org/reference/functions/add_image_size/
+     * @since  1.2.0
+     */
+    public static function addImageSize($name, $width, $height, $crop = false)
+    {
+        add_image_size($name, $width, $height, $crop);
+    }
 
     /**
      * WordPress add theme support helper
