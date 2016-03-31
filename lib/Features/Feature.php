@@ -213,7 +213,7 @@ abstract class Feature
      */
     protected function registerTaxonomyForObjectType($taxonomy, $postType)
     {
-        return add_action('init', function () use ($taxonomy, $postType)) {
+        return add_action('init', function () use ($taxonomy, $postType) {
             register_taxonomy_for_object_type($taxonomy, $postType);
         });
     }
