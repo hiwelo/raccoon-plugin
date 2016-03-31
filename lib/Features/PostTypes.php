@@ -111,6 +111,15 @@ class PostTypes extends Feature
             }
             // custom post type registration
             $this->registerPostType($postType, $args);
+            // if we have asked taxonomies
+            if (isset($args['taxonomies'])
+                && is_array($args['taxonomies'])
+                && count($args['taxonomies']) > 0
+            ) {
+                foreach ($args['taxonomies'] as $taxonomy) {
+                    $this->registerTaxonomyForObjectType($taxonomy, $postType);
+                }
+            }
         }
     }
 
