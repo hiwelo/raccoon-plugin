@@ -202,6 +202,23 @@ abstract class Feature
     }
 
     /**
+     * WordPress register_taxonomy_for_object_type helper
+     *
+     * @param  string  $taxonomy Taxonomy slug
+     * @param  string  $postType Post Type slug
+     * @return boolean
+     *
+     * @see   https://codex.wordpress.org/Function_Reference/register_taxonomy_for_object_type
+     * @since 1.2.5
+     */
+    protected function registerTaxonomyForObjectType($taxonomy, $postType)
+    {
+        return add_action('init', function () use ($taxonomy, $postType) {
+            register_taxonomy_for_object_type($taxonomy, $postType);
+        });
+    }
+
+    /**
      * WordPress register_widget helper
      *
      * @param string $widgetClass the name of the class that extends WP_Widget
