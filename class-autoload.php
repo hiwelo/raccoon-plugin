@@ -18,10 +18,7 @@
  * @return void
  */
 spl_autoload_register(function ($className) {
-    $path = __FILE__;
-    $path = explode('/', $path);
-    unset($path[count($path) - 1]);
-    $path = implode('/', $path);
+    $path = dirname(__FILE__);
 
     $namespace = explode('\\', $className);
     $className = $namespace[count($namespace) - 1];
