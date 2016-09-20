@@ -153,7 +153,7 @@ class Raccoon
                 // add here some development features
                 break;
             case "production":
-                new ProductionFeatures($this->manifest['production']);
+                // new ProductionFeatures($this->manifest['production']); // @TOFIX
                 break;
         }
     }
