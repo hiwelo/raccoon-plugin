@@ -14,8 +14,8 @@
         }
     ],
     "support": {
-      "issues": "https://github.com/hiwelo/raccoon-plugin/issues",
-      "source": "https://github.com/hiwelo/raccoon-plugin"
+        "issues": "https://github.com/hiwelo/raccoon-plugin/issues",
+        "source": "https://github.com/hiwelo/raccoon-plugin"
     },
     "require": {
         "php": ">=5.5",
