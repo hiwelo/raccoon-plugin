@@ -31,9 +31,13 @@ class WPUtils
      * @see   https://codex.wordpress.org/Function_Reference/add_theme_support
      * @since 1.2.0
      */
-    public static function addThemeSupport($feature, $args = [])
+    public static function addThemeSupport($feature, $args = null)
     {
-        add_theme_support($feature, $args);
+        if ($args === null) {
+            add_theme_support($feature);
+        } else {
+            add_theme_support($feature, $args);
+        }
     }
 
     /**

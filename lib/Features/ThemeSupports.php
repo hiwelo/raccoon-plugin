@@ -45,7 +45,7 @@ class ThemeSupports implements RegisterableInterface
     protected function enable()
     {
         foreach ($this->toAdd as $key => $value) {
-            if (gettype(Tools::parseBooleans($value)) == 'boolean' && $value === true) {
+            if (Tools::parseBooleans($value) === true) {
                 WPUtils::addThemeSupport($key);
             } else {
                 WPUtils::addThemeSupport($key, $value);
