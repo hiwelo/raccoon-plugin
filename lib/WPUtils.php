@@ -101,6 +101,23 @@ class WPUtils
     }
 
     /**
+     * WordPress register_taxonomy helper
+     *
+     * @param string       $taxonomy name of the taxonomy, max length 20 chars
+     * @param string|array $object   targeted object for this taxonomy
+     * @param array        $args     an array of arguments for this taxonomy
+     *
+     * @return string taxonomy id
+     *
+     * @see   https://codex.wordpress.org/Function_Reference/register_taxonomy
+     * @since 1.2.0
+     */
+    public static function registerTaxonomy($taxonomy, $object, $args = [])
+    {
+        return register_taxonomy($taxonomy, $object, $args);
+    }
+
+    /**
      * WordPress register_widget helper
      *
      * @param string $widgetClass the name of the class that extends WP_Widget
