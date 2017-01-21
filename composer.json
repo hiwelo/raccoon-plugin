@@ -18,7 +18,7 @@
         "source": "https://github.com/hiwelo/raccoon-plugin"
     },
     "require": {
-        "php": ">=5.5",
+        "php": ">=5.6",
         "composer/installers": "~1.0.12",
         "symfony/yaml": "^3.0"
     },
