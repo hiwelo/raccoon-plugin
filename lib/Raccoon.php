@@ -63,6 +63,11 @@ class Raccoon
         // load and parse manifest file
         $this->manifest = Manifest::load();
 
+        // early termination
+        if (is_null($this->manifest)) {
+            return;
+        }
+
         // load environment status
         $this->loadEnvironmentStatus();
         // load namespace if a specific one is specified
@@ -154,7 +159,7 @@ class Raccoon
                 // add here some development features
                 break;
             case "production":
-                new ProductionFeatures($this->manifest['production']);
+                // new ProductionFeatures($this->manifest['production']); // @TOFIX
                 break;
         }
     }

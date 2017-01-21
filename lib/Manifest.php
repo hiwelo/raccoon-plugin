@@ -142,6 +142,7 @@ class Manifest
                 break;
 
             case 'yaml':
+            case 'yml':
                 $yaml = new Parser();
                 return $yaml->parse($manifest);
                 break;
