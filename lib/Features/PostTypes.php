@@ -15,6 +15,7 @@
 namespace Hiwelo\Raccoon\Features;
 
 use Hiwelo\Raccoon\Tools;
+use Hiwelo\Raccoon\WPUtils;
 
 /**
  * WordPress post types methods
@@ -28,33 +29,9 @@ use Hiwelo\Raccoon\Tools;
  * @link     https://github.com/hiwelo/raccoon-plugin
  * @since    1.2.0
  */
-class PostTypes extends Feature
+class PostTypes implements RegisterableInterface, UnregistrableInterface
 {
-    /**
-     * Default values
-     *
-     * @return array default configuration
-     *
-     * @since 1.2.0
-     */
-    protected function defaultValues()
-    {
-        return [];
-    }
-
-    /**
-     * Feature constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   Feature::mergeConfigurationWithDefault();
-     * @since 1.2.0
-     */
-    public function __construct($configuration)
-    {
-        parent::__construct($configuration);
-    }
-
+    use Registerable, Unregisterable;
     /**
      * Registration method
      *
@@ -66,9 +43,9 @@ class PostTypes extends Feature
      * @see   https://developer.wordpress.org/reference/functions/_x
      * @since 1.2.0
      */
-    protected function registration()
+    protected function enable()
     {
-        foreach ($this->addItems as $postType => $args) {
+        foreach ($this->toAdd as $postType => $args) {
             // parsing labels value
             if (array_key_exists('labels', $args)) {
                 $labels = $args['labels'];
@@ -94,14 +71,17 @@ class PostTypes extends Feature
                     }
                 }
             }
+
             // parsing label value
             if (array_key_exists('label', $args)) {
                 $args['label'] = __($args['label'], THEME_NAMESPACE);
             }
+
             // parsing description value
             if (array_key_exists('description', $args)) {
                 $args['description'] = __($args['description'], THEME_NAMESPACE);
             }
+
             // replace "true" string value by a real boolean
             $stringBooleans = array_keys($args, "true");
             if ($stringBooleans) {
@@ -109,17 +89,9 @@ class PostTypes extends Feature
                     $args[$key] = true;
                 }
             }
+
             // custom post type registration
-            $this->registerPostType($postType, $args);
-            // if we have asked taxonomies
-            if (isset($args['taxonomies'])
-                && is_array($args['taxonomies'])
-                && count($args['taxonomies']) > 0
-            ) {
-                foreach ($args['taxonomies'] as $taxonomy) {
-                    $this->registerTaxonomyForObjectType($taxonomy, $postType);
-                }
-            }
+            WPUtils::registerPostType($postType, $args);
         }
     }
 
@@ -135,12 +107,12 @@ class PostTypes extends Feature
      * @see   https://developer.wordpress.org/reference/functions/remove_menu_page
      * @since 1.2.0
      */
-    protected function unregistration()
+    protected function disable()
     {
         // get all register post types
         global $wp_post_types;
 
-        foreach ($this->removeItems as $postType) {
+        foreach ($this->toRemove as $postType) {
             // get post type name to remove from admin menu bar
             $itemName = $wp_post_types[$postType]->name;
             // unregister asked post type

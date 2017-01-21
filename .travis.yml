@@ -2,6 +2,12 @@ sudo: false
 language:
   - php
 
+php:
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - hhvm
+
 cache:
   directories:
     - vendor
@@ -11,3 +17,6 @@ install:
 
 script:
   - composer phpcs
+
+notifications:
+  email: false

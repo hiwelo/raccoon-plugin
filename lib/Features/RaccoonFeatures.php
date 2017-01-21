@@ -29,32 +29,9 @@ use Hiwelo\Raccoon\Tools;
  * @link     https://github.com/hiwelo/raccoon-plugin
  * @since    1.2.0
  */
-class RaccoonFeatures extends Feature
+class RaccoonFeatures implements RegisterableInterface
 {
-    /**
-     * Default values
-     *
-     * @return array default configuration
-     *
-     * @since 1.2.0
-     */
-    protected function defaultValues()
-    {
-        return [];
-    }
-
-    /**
-     * Feature constructor
-     *
-     * @param array $configuration cleanup configuration
-     *
-     * @see   Feature::mergeConfigurationWithDefault();
-     * @since 1.2.0
-     */
-    public function __construct($configuration)
-    {
-        parent::__construct($configuration);
-    }
+    use Registerable;
 
     /**
      * Registration method
@@ -67,13 +44,14 @@ class RaccoonFeatures extends Feature
      * @see   https://codex.wordpress.org/Function_Reference/add_filter
      * @since 1.2.0
      */
-    protected function registration()
+    protected function enable()
     {
-        foreach ($this->configuration as $option => $status) {
+        foreach ($this->toAdd as $option => $status) {
             Tools::parseBooleans($status);
 
             switch ($option) {
                 case 'svg-upload':
+                case 'svg-uploads':
                     if ($status === true) {
                         $this->enableSVG();
                     }
@@ -85,13 +63,8 @@ class RaccoonFeatures extends Feature
                     }
                     break;
 
-                case 'widgets':
-                    if ($status === false) {
-                        $this->removeWidgets();
-                    }
-                    break;
-
                 case 'widget':
+                case 'widgets':
                     if ($status === false) {
                         $this->removeWidgets();
                     }
@@ -116,20 +89,6 @@ class RaccoonFeatures extends Feature
                     break;
             }
         }
-    }
-
-    /**
-     * Unregistration method
-     *
-     * @return void
-     *
-     * @see   Feature::$removeItems
-     * @see   https://codex.wordpress.org/Function_Reference/add_filter
-     * @since 1.2.0
-     */
-    protected function unregistration()
-    {
-        return;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
  /**
-  * WordPress widgets methods
+  * WordPress thumbnail management methods
   *
   * PHP version 5
   *
@@ -14,10 +14,11 @@
 
 namespace Hiwelo\Raccoon\Features;
 
-use Hiwelo\Raccoon\WPUtils;
+use Hiwelo\Raccoon\CleanUp;
+use Hiwelo\Raccoon\Tools;
 
 /**
- * WordPress widgets methods
+ * Raccoon specific features methods
  *
  * PHP version 5
  *
@@ -28,22 +29,26 @@ use Hiwelo\Raccoon\WPUtils;
  * @link     https://github.com/hiwelo/raccoon-plugin
  * @since    1.2.0
  */
-class Widgets implements RegisterableInterface
+class Thumbnails implements RegisterableInterface
 {
     use Registerable;
+
     /**
      * Registration method
      *
      * @return void
      *
-     * @see   Feature::$configuration
-     * @see   Feature::registerWidget();
-     * @since 1.2.0
+     * @since 1.3.0
      */
     protected function enable()
     {
-        foreach ($this->toAdd as $widget) {
-            WPUtils::registerWidget($widget);
+        foreach ($this->toAdd as $sizeName => $sizeArgs) {
+            WPUtils::addImageSize(
+                $sizeName,
+                $sizeArgs['width'],
+                $sizeArgs['height'],
+                $sizeArgs['crop'],
+            );
         }
     }
 }

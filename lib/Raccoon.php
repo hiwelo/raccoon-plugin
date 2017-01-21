@@ -19,6 +19,7 @@ use Hiwelo\Raccoon\Features\PostStatus;
 use Hiwelo\Raccoon\Features\PostTypes;
 use Hiwelo\Raccoon\Features\RaccoonFeatures;
 use Hiwelo\Raccoon\Features\Sidebars;
+use Hiwelo\Raccoon\Features\Taxonomies;
 use Hiwelo\Raccoon\Features\ThemeSupports;
 use Hiwelo\Raccoon\Features\Widgets;
 
@@ -76,18 +77,19 @@ class Raccoon
         $this->i18nReady();
 
         // load all features or tasks asked
-        (new ContactMethods($this->manifest->getChildrenOf('contact-methods')))->register();
-        (new Navigations($this->manifest->getChildrenOf('navigations')))->register();
-        (new PostStatus($this->manifest->getChildrenOf('post-status')))->register();
-        (new PostTypes($this->manifest->getChildrenOf('post-types')))->register();
-        (new RaccoonFeatures($this->manifest->getChildrenOf('theme-features')))->register();
-        (new Sidebars($this->manifest->getChildrenOf('sidebars')))->register();
-        (new ThemeSupports($this->manifest->getChildrenOf('theme-support')))->register();
-        (new Widgets($this->manifest->getChildrenOf('widgets')))->register();
+        (new ContactMethods())->register($this->manifest->getChildrenOf('contact-methods'));
+        (new Navigations())->register($this->manifest->getChildrenOf('navigations'));
+        (new PostStatus())->register($this->manifest->getChildrenOf('post-status'));
+        (new PostTypes())->register($this->manifest->getChildrenOf('post-types'));
+        (new RaccoonFeatures())->register($this->manifest->getChildrenOf('theme-features'));
+        (new Sidebars())->register($this->manifest->getChildrenOf('sidebars'));
+        (new Taxonomies())->register($this->manifest->getChildrenOf('taxonomies'));
+        (new ThemeSupports())->register($this->manifest->getChildrenOf('theme-support'));
+        (new Widgets())->register($this->manifest->getChildrenOf('widgets'));
 
         // remove asked features or items
-        (new ContactMethods($this->manifest->getChildrenOf('contact-methods')))->unregister();
-        (new PostTypes($this->manifest->getChildrenOf('post-types')))->unregister();
+        (new ContactMethods())->unregister($this->manifest->getChildrenOf('contact-methods'));
+        (new PostTypes())->unregister($this->manifest->getChildrenOf('post-types'));
     }
 
     /**
@@ -116,6 +118,12 @@ class Raccoon
      */
     private function loadNamespace()
     {
+        // we check if we already have a theme namespace constant defined
+        if (array_key_exists('THEME_NAMESPACE', get_defined_constants())) {
+            return;
+        }
+
+        // we check if a specific namespace is called
         if (!$this->manifest->existsAndNotEmpty('namespace')) {
             $manifestNamespace = 'raccoon';
         } else {
