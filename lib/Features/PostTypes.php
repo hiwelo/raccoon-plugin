@@ -92,9 +92,6 @@ class PostTypes implements RegisterableInterface, UnregistrableInterface
 
             // custom post type registration
             WPUtils::registerPostType($postType, $args);
-
-            // register a new nav panel for this custom post type
-
         }
     }
 
