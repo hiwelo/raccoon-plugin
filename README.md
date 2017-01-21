@@ -2,7 +2,7 @@
 
 **[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** is a [_WordPress_](https://wordpress.org/) plugin which allows you to easily manage WordPress theme features with a JSON or YAML configuration file.
 
-[![Build Status](https://travis-ci.org/hiwelo/raccoon-plugin.svg)](https://travis-ci.org/hiwelo/raccoon)
+[![Build Status](https://travis-ci.org/hiwelo/raccoon-plugin.svg)](https://travis-ci.org/hiwelo/raccoon-plugin)
 
 
 ## Summary
