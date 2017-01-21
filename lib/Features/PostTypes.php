@@ -71,14 +71,17 @@ class PostTypes implements RegisterableInterface, UnregistrableInterface
                     }
                 }
             }
+
             // parsing label value
             if (array_key_exists('label', $args)) {
                 $args['label'] = __($args['label'], THEME_NAMESPACE);
             }
+
             // parsing description value
             if (array_key_exists('description', $args)) {
                 $args['description'] = __($args['description'], THEME_NAMESPACE);
             }
+
             // replace "true" string value by a real boolean
             $stringBooleans = array_keys($args, "true");
             if ($stringBooleans) {
@@ -86,8 +89,12 @@ class PostTypes implements RegisterableInterface, UnregistrableInterface
                     $args[$key] = true;
                 }
             }
+
             // custom post type registration
             WPUtils::registerPostType($postType, $args);
+
+            // register a new nav panel for this custom post type
+
         }
     }
 
@@ -162,67 +169,5 @@ class PostTypes implements RegisterableInterface, UnregistrableInterface
                 ";
             });
         }
-    }
-
-    public function postTypesInNavigation()
-    {
-        add_action('admin_head-nav-menus.php', function () {
-            add_meta_box('add-cpt', __('Custom post types'), function () {
-                $postTypes = get_post_types([
-                    'show_in_nav_menus' => true,
-                    'has_archive' => true,
-                ], 'object');
-
-                foreach ($postTypes as $postType) {
-                    $postType->classes = [];
-                    $postType->type = $posttype->name;
-                    $postType->object_id = $postType->name;
-                    $postType->title = $postType->labels->name . ' ' . __('Archive');
-                    $postType->object = 'cpt-archive';
-                }
-
-                $walker = new Walker_Nav_Menu_Checklist([]);
-
-                echo '<div id="cpt-archive" class="posttypediv">' .
-                     '<div id="tabs-panel-cpt-archive" class="tabs-panel tabs-panel-active">' .
-                     '<ul id="cpt-archive-checklist" class="categorychecklist form-no-clear">' .
-                     walk_nav_menu_tree(
-                         array_map('wp_setup_nav_menu_item', $postTypes),
-                         0,
-                         (object) ['walker' => $walker]
-                     ) .
-                     '</ul>' .
-                     '</div>' .
-                     '</div>' .
-                     '<p class="button-controls">' .
-                     '<span class="add-to-menu">' .
-                     '<img class="waiting" src="' . esc_url(admin_url('images/wpspin_light.gif')) . '" alt="">' .
-                     '<input type="submit" ' . disabled($nav_menu_selected_id, 0) .
-                         ' class="button-secondary submit-add-to-menu" ' .
-                         'value="' . esc_attr_e('Add to Menu') . '" ' .
-                         'name="add-ctp-archive-menu-item" ' .
-                         'id="submit-cpt-archive">' .
-                     '</span>' .
-                     '</p>';
-            });
-        });
-
-        add_filter('wp_get_nav_menu_items', function ($items, $menu, $args) {
-            // URL modification
-            foreach ($items as &$item) {
-                if ($item->object != 'cpt-archive') {
-                    continue;
-                }
-
-                $item->url = get_post_type_archive_link($item->type);
-
-                if (get_query_var('post_type') == $item->type) {
-                    $item->classes[] = 'current-menu-item';
-                    $item->current = true;
-                }
-            }
-
-            return $items;
-        }, 10, 3);
     }
 }
