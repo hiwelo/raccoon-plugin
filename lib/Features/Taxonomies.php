@@ -17,7 +17,7 @@ namespace Hiwelo\Raccoon\Features;
 use Hiwelo\Raccoon\WPUtils;
 
 /**
- * WordPress post types methods
+ * WordPress taxonomy management methods
  *
  * PHP version 5
  *
@@ -37,7 +37,7 @@ class Taxonomies implements RegisterableInterface
      * @return void
      *
      * @see   Feature::$addItems
-     * @see   Feature::registerPostType();
+     * @see   Feature::registerTaxonomy();
      * @see   https://developer.wordpress.org/reference/functions/__
      * @see   https://developer.wordpress.org/reference/functions/_x
      * @since 1.2.0
@@ -91,7 +91,7 @@ class Taxonomies implements RegisterableInterface
             $objects = $args['object'];
             unset($args['object']);
 
-            // custom post type registration
+            // custom taxonomy registration
             WPUtils::registerTaxonomy($taxonomy, $objects, $args);
         }
     }
