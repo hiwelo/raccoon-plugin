@@ -186,14 +186,22 @@ class PostTypes implements RegisterableInterface, UnregistrableInterface
                 echo '<div id="cpt-archive" class="posttypediv">' .
                      '<div id="tabs-panel-cpt-archive" class="tabs-panel tabs-panel-active">' .
                      '<ul id="cpt-archive-checklist" class="categorychecklist form-no-clear">' .
-                     walk_nav_menu_tree(array_map('wp_setup_nav_menu_item', $postTypes), 0, (object) ['walker' => $walker]) .
+                     walk_nav_menu_tree(
+                         array_map('wp_setup_nav_menu_item', $postTypes),
+                         0,
+                         (object) ['walker' => $walker]
+                     ) .
                      '</ul>' .
                      '</div>' .
                      '</div>' .
                      '<p class="button-controls">' .
                      '<span class="add-to-menu">' .
                      '<img class="waiting" src="' . esc_url(admin_url('images/wpspin_light.gif')) . '" alt="">' .
-                     '<input type="submit" ' . disabled($nav_menu_selected_id, 0) . ' class="button-secondary submit-add-to-menu" value="' . esc_attr_e('Add to Menu') . '" name="add-ctp-archive-menu-item" id="submit-cpt-archive">' .
+                     '<input type="submit" ' . disabled($nav_menu_selected_id, 0) .
+                         ' class="button-secondary submit-add-to-menu" ' .
+                         'value="' . esc_attr_e('Add to Menu') . '" ' .
+                         'name="add-ctp-archive-menu-item" ' .
+                         'id="submit-cpt-archive">' .
                      '</span>' .
                      '</p>';
             });
