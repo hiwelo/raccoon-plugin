@@ -19,6 +19,7 @@ use Hiwelo\Raccoon\Features\PostStatus;
 use Hiwelo\Raccoon\Features\PostTypes;
 use Hiwelo\Raccoon\Features\RaccoonFeatures;
 use Hiwelo\Raccoon\Features\Sidebars;
+use Hiwelo\Raccoon\Features\Styles;
 use Hiwelo\Raccoon\Features\Taxonomies;
 use Hiwelo\Raccoon\Features\ThemeSupports;
 use Hiwelo\Raccoon\Features\Widgets;
@@ -83,6 +84,7 @@ class Raccoon
         (new PostTypes())->register($this->manifest->getChildrenOf('post-types'));
         (new RaccoonFeatures())->register($this->manifest->getChildrenOf('theme-features'));
         (new Sidebars())->register($this->manifest->getChildrenOf('sidebars'));
+        (new Styles())->register($this->manifest->getChildrenOf('styles'));
         (new Taxonomies())->register($this->manifest->getChildrenOf('taxonomies'));
         (new ThemeSupports())->register($this->manifest->getChildrenOf('theme-support'));
         (new Widgets())->register($this->manifest->getChildrenOf('widgets'));

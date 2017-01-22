@@ -41,6 +41,46 @@ class WPUtils
     }
 
     /**
+     * WordPress stylesheets registration helper
+     *
+     * @param string       $name Stylesheet name
+     * @param string|array $args Stylesheet arguments
+     *
+     * @return void
+     *
+     * @see   https://developer.wordpress.org/reference/functions/wp_enqueue_style
+     * @since 1.4.0
+     */
+    public static function enqueueStyle($name, $args)
+    {
+        if (is_string($args)) {
+            add_action('wp_enqueue_scripts', function () use ($name, $args) {
+                wp_enqueue_style($name, $args);
+            });
+        } else {
+            if (empty($args['src'])) {
+                return;
+            }
+
+            if (empty($args['deps'])) {
+                $args['deps'] = [];
+            }
+
+            if (empty($args['ver'])) {
+                $args['ver'] = false;
+            }
+
+            if (empty($args['media'])) {
+                $args['media'] = 'all';
+            }
+
+            add_action('wp_enqueue_scripts', function () use ($name, $args) {
+                wp_enqueue_style($name, $args['src'], $args['deps'], $args['ver'], $args['media']);
+            });
+        }
+    }
+
+    /**
      * WordPress register_post_type helper
      *
      * @param string $postType post type (max 20 chars)
