@@ -41,6 +41,46 @@ class WPUtils
     }
 
     /**
+     * WordPress scripts registration helper
+     *
+     * @param string       $name Script name
+     * @param string|array $args Script arguments
+     *
+     * @return void
+     *
+     * @see   https://developer.wordpress.org/reference/functions/wp_enqueue_script
+     * @since 1.4.0
+     */
+    public static function enqueueScript($name, $args)
+    {
+        if (is_string($args)) {
+            add_action('wp_enqueue_scripts', function () use ($name, $args) {
+                wp_enqueue_script($name, $args);
+            });
+        } else {
+            if (empty($args['src'])) {
+                return;
+            }
+
+            if (empty($args['deps'])) {
+                $args['deps'] = [];
+            }
+
+            if (empty($args['ver'])) {
+                $args['ver'] = false;
+            }
+
+            if (empty($args['in_footer'])) {
+                $args['media'] = false;
+            }
+
+            add_action('wp_enqueue_scripts', function () use ($name, $args) {
+                wp_enqueue_script($name, $args['src'], $args['deps'], $args['ver'], $args['in_footer']);
+            });
+        }
+    }
+
+    /**
      * WordPress stylesheets registration helper
      *
      * @param string       $name Stylesheet name

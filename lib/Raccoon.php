@@ -83,6 +83,7 @@ class Raccoon
         (new PostStatus())->register($this->manifest->getChildrenOf('post-status'));
         (new PostTypes())->register($this->manifest->getChildrenOf('post-types'));
         (new RaccoonFeatures())->register($this->manifest->getChildrenOf('theme-features'));
+        (new Scripts())->register($this->manifest->getChildrenOf('scripts'));
         (new Sidebars())->register($this->manifest->getChildrenOf('sidebars'));
         (new Styles())->register($this->manifest->getChildrenOf('styles'));
         (new Taxonomies())->register($this->manifest->getChildrenOf('taxonomies'));
