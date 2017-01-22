@@ -18,6 +18,7 @@ use Hiwelo\Raccoon\Features\Navigations;
 use Hiwelo\Raccoon\Features\PostStatus;
 use Hiwelo\Raccoon\Features\PostTypes;
 use Hiwelo\Raccoon\Features\RaccoonFeatures;
+use Hiwelo\Raccoon\Features\Scripts;
 use Hiwelo\Raccoon\Features\Sidebars;
 use Hiwelo\Raccoon\Features\Styles;
 use Hiwelo\Raccoon\Features\Taxonomies;
