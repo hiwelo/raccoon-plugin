@@ -45,12 +45,12 @@ class Styles implements RegisterableInterface
     {
         foreach ($this->toAdd as $name => $args) {
             if (is_string($args)) {
-                $args = get_template_directory() . $args;
+                $args = get_template_directory_uri() . '/' . $args;
             } else {
                 if (empty($args['src'])) {
                     return;
                 }
-                $args['src'] = get_template_directory() . $args['src'];
+                $args['src'] = get_template_directory_uri() . '/' . $args['src'];
             }
 
             WPUtils::enqueueStyle($name, $args);
