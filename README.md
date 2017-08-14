@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/hiwelo/raccoon-plugin.png?label=ready&title=Ready)](https://waffle.io/hiwelo/raccoon-plugin?utm_source=badge)
 # Raccoon WordPress plugin
 
 **[Raccoon Plugin](https://github.com/hiwelo/raccoon-plugin)** is a [_WordPress_](https://wordpress.org/) plugin which allows you to easily manage WordPress theme features with a JSON or YAML configuration file.
